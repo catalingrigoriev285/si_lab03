@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Răspunsuri Laborator 03</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --surface-2: #f3f1ec;
+    --text: #1f2328;
+    --muted: #5d6470;
+    --border: #e2ded5;
+    --accent: #2f5fa7;
+    --ok: #1f7a4d;
+    --ok-bg: #e5f4ec;
+    --err: #b3261e;
+    --err-bg: #fbe9e7;
+    --warn: #8a5a00;
+    --warn-bg: #fdf3dc;
+    --code-bg: #f5f3ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a;
+      --surface: #1c1f23;
+      --surface-2: #23272d;
+      --text: #e6e6e3;
+      --muted: #a1a7b0;
+      --border: #30353c;
+      --accent: #8fb4ec;
+      --ok: #6fcf9a;
+      --ok-bg: #173226;
+      --err: #f08a80;
+      --err-bg: #3a1f1d;
+      --warn: #e8c070;
+      --warn-bg: #362b14;
+      --code-bg: #111316;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a;
+    --surface: #1c1f23;
+    --surface-2: #23272d;
+    --text: #e6e6e3;
+    --muted: #a1a7b0;
+    --border: #30353c;
+    --accent: #8fb4ec;
+    --ok: #6fcf9a;
+    --ok-bg: #173226;
+    --err: #f08a80;
+    --err-bg: #3a1f1d;
+    --warn: #e8c070;
+    --warn-bg: #362b14;
+    --code-bg: #111316;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+  header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+  header h1 { font-size: 1.85rem; line-height: 1.25; margin: 0 0 6px; }
+  header p { margin: 0; color: var(--muted); }
+
+  nav.toc {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 36px; font-size: .95rem;
+  }
+  nav.toc strong { display: block; margin-bottom: 6px; }
+  nav.toc a { color: var(--accent); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  nav.toc ul { margin: 0; padding-left: 18px; columns: 2; column-gap: 28px; }
+  @media (max-width: 560px) { nav.toc ul { columns: 1; } }
+
+  h2 {
+    font-size: 1.35rem; margin: 48px 0 6px; padding-top: 8px;
+    border-top: 2px solid var(--text);
+  }
+  h2 + .lead { color: var(--muted); margin: 0 0 18px; font-size: .95rem; }
+
+  section.ex {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px 6px; margin: 16px 0;
+  }
+  section.ex h3 { margin: 0 0 4px; font-size: 1.08rem; }
+  section.ex h3 .id {
+    display: inline-block; min-width: 2.2em; color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .q { color: var(--muted); font-size: .93rem; margin: 0 0 12px; font-style: italic; }
+  section.ex p, section.ex ul { margin: 0 0 12px; }
+  section.ex ul { padding-left: 20px; }
+  section.ex li { margin-bottom: 4px; }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .88em; background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 0 4px;
+  }
+  pre {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .82rem; line-height: 1.5; background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 0 0 14px;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+  .label { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 4px; }
+
+  .tag {
+    display: inline-block; font-size: .78rem; font-weight: 600; border-radius: 999px;
+    padding: 1px 9px; vertical-align: 1px; white-space: nowrap;
+  }
+  .tag.ok { color: var(--ok); background: var(--ok-bg); }
+  .tag.err { color: var(--err); background: var(--err-bg); }
+  .tag.warn { color: var(--warn); background: var(--warn-bg); }
+
+  .note {
+    border-left: 3px solid var(--accent); background: var(--surface-2);
+    padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 0 0 14px; font-size: .94rem;
+  }
+
+  .table-wrap { overflow-x: auto; margin: 0 0 14px; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { border-bottom: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+  .cols > div { min-width: 0; }
+
+  footer { margin-top: 56px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); padding-top: 14px; }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>Laborator 03 — Răspunsuri la exerciții</h1>
+  <p>Serverul MCP al clădirii inteligente: scheme de date, erori, transport HTTP și mesaje JSON-RPC.
+     Mediu: FastMCP 4.1.4, protocol MCP 2026-07-28.</p>
+</header>
+
+<nav class="toc" aria-label="Cuprins">
+  <strong>Cuprins</strong>
+  <ul>
+    <li><a href="#a">(A) Scheme de date și erori</a></li>
+    <li><a href="#b">(B) Transportul HTTP</a></li>
+    <li><a href="#c">(C) Trimiterea de mesaje</a></li>
+    <li><a href="#tema">Temă: handle-uri</a></li>
+  </ul>
+</nav>
+
+<!-- =============================== A =============================== -->
+<h2 id="a">3.4. Exerciții (A) — scheme de date și erori</h2>
+<p class="lead">Server pornit cu <code>python server.py</code> (stdio, în Inspector) și <code>python server.py http</code> (pentru apelurile cu <code>raw_client.py</code>).</p>
+
+<section class="ex" id="a1">
+  <h3><span class="id">A1</span> Schema de intrare</h3>
+  <p class="q">Cum arată câmpurile name și hours în formular? Găsiți în schemă enum, exclusiveMinimum și maximum.</p>
+  <ul>
+    <li><strong><code>name</code></strong> apare în formular ca <strong>listă derulantă (select)</strong> cu cele 5 valori permise. Nu se poate scrie un nume liber, pentru că tipul <code>Literal[...]</code> din Python devine <code>enum</code> în schema JSON.</li>
+    <li><strong><code>hours</code></strong> apare ca <strong>câmp numeric</strong>, cu descrierea „Durata de funcționare, în ore (0-24].” Limitele vin din <code>Field(gt=0, le=24)</code>: <code>gt</code> devine <code>exclusiveMinimum</code>, iar <code>le</code> devine <code>maximum</code>.</li>
+  </ul>
+  <p class="label">inputSchema pentru estimate_energy (din tools/list)</p>
+<pre><code>{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "enum": ["lampa_led", "radiator", "aer_conditionat", "jaluzele", "ventilatie"],
+      "type": "string"
+    },
+    "hours": {
+      "description": "Durata de funcționare, în ore (0-24].",
+      "exclusiveMinimum": 0,
+      "maximum": 24,
+      "type": "number"
+    }
+  },
+  "required": ["name", "hours"]
+}</code></pre>
+  <p><code>get_device_info</code> are același <code>enum</code> pentru <code>name</code>. Ambele câmpuri sunt în <code>required</code>, iar <code>additionalProperties: false</code> respinge argumentele în plus. Prin comparație, <code>set_thermostat</code> folosește <code>ge</code>/<code>le</code>, deci limitele sunt <em>inclusive</em>: <code>minimum: 10</code>, <code>maximum: 30</code>.</p>
+</section>
+
+<section class="ex" id="a2">
+  <h3><span class="id">A2</span> Schema de ieșire</h3>
+  <p class="q">Apelați get_device_info cu radiator. Comparați content cu structuredContent. De ce le trimite serverul pe amândouă?</p>
+<pre><code>"result": {
+  "content": [
+    { "type": "text",
+      "text": "{\"nume\":\"radiator\",\"categorie\":\"încălzire\",\"putere_w\":1500,\"note\":\"Controlat de termostatul camerei.\"}" }
+  ],
+  "structuredContent": {
+    "nume": "radiator",
+    "categorie": "încălzire",
+    "putere_w": 1500,
+    "note": "Controlat de termostatul camerei."
+  },
+  "isError": false,
+  "resultType": "complete"
+}</code></pre>
+  <ul>
+    <li><strong><code>content</code></strong> este o listă de blocuri pentru afișare. Aici e un singur bloc <code>text</code>, care conține obiectul <em>serializat ca șir de caractere</em> (JSON cu ghilimele escapate).</li>
+    <li><strong><code>structuredContent</code></strong> conține <em>același obiect</em>, dar ca JSON propriu-zis, conform cu <code>outputSchema</code> generată din modelul Pydantic <code>DeviceInfo</code>. Câmpurile sunt tipizate (<code>putere_w</code> e număr întreg).</li>
+  </ul>
+  <p><strong>De ce amândouă:</strong> pentru compatibilitate. Specificația spune că, dacă un instrument are <code>outputSchema</code>, serverul <em>trebuie</em> să pună în <code>structuredContent</code> date conforme, iar clientul <em>ar trebui</em> să le valideze. Tot specificația cere ca serverul să pună același JSON și ca text în <code>content</code>. Clienții mai vechi și modelele care citesc doar text folosesc <code>content</code>. Codul care prelucrează datele (validare, afișare în tabele, calcule) folosește <code>structuredContent</code>, fără să mai parseze text. FastMCP generează automat ambele câmpuri.</p>
+</section>
+
+<section class="ex" id="a3">
+  <h3><span class="id">A3</span> Un rezultat care nu e obiect</h3>
+  <p class="q">list_devices întoarce o listă. Ce a făcut FastMCP cu lista și de ce?</p>
+  <div class="cols">
+    <div>
+      <p class="label">outputSchema</p>
+<pre><code>{
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["result"],
+  "x-fastmcp-wrap-result": true
+}</code></pre>
+    </div>
+    <div>
+      <p class="label">Rezultatul apelului</p>
+<pre><code>"content": [{ "type": "text",
+  "text": "[\"aer_conditionat\",\"jaluzele\",
+            \"lampa_led\",\"radiator\",\"ventilatie\"]" }],
+"structuredContent": {
+  "result": ["aer_conditionat", "jaluzele",
+             "lampa_led", "radiator", "ventilatie"]
+},
+"_meta": { "fastmcp": { "wrap_result": true } }</code></pre>
+    </div>
+  </div>
+  <p>FastMCP a <strong>împachetat lista într-un obiect</strong> cu o singură cheie, <code>result</code>. Schema de ieșire e de tip <code>object</code>, nu <code>array</code>, și e marcată cu <code>x-fastmcp-wrap-result: true</code>. Răspunsul are și <code>_meta.fastmcp.wrap_result: true</code>.</p>
+  <p><strong>De ce:</strong> MCP cere ca <code>structuredContent</code> să fie un <em>obiect</em> JSON, iar <code>outputSchema</code> să descrie un obiect (<code>"type": "object"</code>). O listă, un șir sau un număr returnat direct nu ar fi valid. Marcajul îi permite clientului FastMCP să despacheteze automat valoarea (<code>result.data</code> devine din nou lista). În <code>content</code>, textul conține lista neîmpachetată.</p>
+</section>
+
+<section class="ex" id="a4">
+  <h3><span class="id">A4</span> Două erori de execuție</h3>
+  <p class="q">get_device_info cu name=frigider, apoi estimate_energy cu name=radiator și hours=30. Cine a produs mesajul: codul vostru sau validarea schemei? Ce valoare are isError?</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Apel</th><th>Mesaj primit (în <code>content[0].text</code>)</th><th>isError</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>get_device_info</code><br><code>name=frigider</code></td>
+        <td><code>1 validation error for call[get_device_info] name — Input should be 'lampa_led', 'radiator', 'aer_conditionat', 'jaluzele' or 'ventilatie' [type=literal_error, input_value='frigider']</code></td>
+        <td><span class="tag err">true</span></td>
+      </tr>
+      <tr>
+        <td><code>estimate_energy</code><br><code>name=radiator hours=30</code></td>
+        <td><code>1 validation error for call[estimate_energy] hours — Input should be less than or equal to 24 [type=less_than_equal, input_value=30]</code></td>
+        <td><span class="tag err">true</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>Ambele mesaje sunt produse de <strong>validarea schemei</strong> (Pydantic, prin FastMCP), <strong>nu de codul nostru</strong>. Se vede din formatul <code>validation error … [type=literal_error]</code> / <code>[type=less_than_equal]</code>. Funcțiile <code>get_device_info</code> și <code>estimate_energy</code> nici nu au rulat. Mesajul nostru din <code>building.py</code> („Dispozitiv necunoscut: frigider. Cunoscute: …”) nu apare, pentru că <code>enum</code> respinge numele înainte de apel.</li>
+    <li><code>isError</code> este <strong><code>true</code></strong> în ambele cazuri. Sunt <strong>erori de execuție</strong>, nu de protocol. Răspunsul are <code>result</code> (nu <code>error</code>), iar HTTP întoarce 200. De aceea CLI-ul se încheie cu un cod de ieșire nenul, deși comanda în sine a funcționat.</li>
+    <li>Verificarea din <code>Building._check</code> rămâne o a doua linie de apărare, utilă când biblioteca e folosită direct, fără MCP.</li>
+  </ul>
+</section>
+
+<section class="ex" id="a5">
+  <h3><span class="id">A5</span> O eroare de domeniu</h3>
+  <p class="q">set_device_state cu radiator, on=true, apoi cu aer_conditionat, on=true. Ce mesaj primiți? Unde a fost scris?</p>
+  <div class="cols">
+    <div>
+      <p class="label">1. radiator, on=true <span class="tag ok">isError: false</span></p>
+<pre><code>"structuredContent": {
+  "pornite": ["radiator"],
+  "termostat_c": 21.0
+}</code></pre>
+    </div>
+    <div>
+      <p class="label">2. aer_conditionat, on=true <span class="tag err">isError: true</span></p>
+<pre><code>"content": [{ "type": "text", "text":
+  "Nu pornesc aer_conditionat: conflict
+   RIDICAT cu radiator, care este pornit.
+   Încălzire și răcire simultană,
+   consum inutil." }]</code></pre>
+    </div>
+  </div>
+  <p>Mesajul a fost scris în <strong><code>building.py</code></strong>. Metoda <code>Building.set_device</code> găsește conflictul de nivel <code>RIDICAT</code> și ridică <code>BuildingError</code> cu textul de mai sus. Descrierea „Încălzire și răcire simultană, consum inutil.” vine din dicționarul <code>CONFLICTE</code>. <code>server.py</code> nu scrie niciun mesaj: funcția <code>_domeniu</code> doar prinde <code>BuildingError</code> și o ridică din nou ca <code>ToolError(str(e))</code>, pe care FastMCP o transformă în rezultat cu <code>isError: true</code>. Rezultatul de eroare nu are <code>structuredContent</code>.</p>
+  <p class="note">Spre deosebire de A4, aici argumentele sunt valide ca formă, dar încalcă o regulă a domeniului. Schema nu poate exprima o astfel de regulă, deoarece ea depinde de starea curentă. Mesajul este clar, așa că modelul îl poate citi și corecta singur cererea (de exemplu, oprește întâi radiatorul).</p>
+</section>
+
+<!-- =============================== B =============================== -->
+<h2 id="b">4.5. Exerciții (B) — transportul HTTP</h2>
+<p class="lead">Server pornit separat cu <code>python server.py http</code> la <code>http://127.0.0.1:8000/mcp</code>.</p>
+
+<section class="ex" id="b1">
+  <h3><span class="id">B1</span> Un singur server, mai mulți clienți</h3>
+  <p class="q">Porniți ventilatie din Inspector, apoi rulați client_demo.py. Ce observați la prima linie? Unde a dispărut ventilația și cine a oprit-o?</p>
+<pre><code>Ana    -&gt; set_device_state: {'pornite': ['radiator', 'ventilatie'], 'termostat_c': 21.0}
+Bogdan -&gt; get_building_state: {'pornite': ['radiator', 'ventilatie'], 'termostat_c': 21.0}
+Bogdan -&gt; set_device_state: isError = True | Nu pornesc aer_conditionat: conflict RIDICAT cu radiator, care este pornit. Încălzire și răcire simultană, consum inutil.</code></pre>
+  <ul>
+    <li>În prima linie, Ana pornește doar radiatorul, dar starea întoarsă conține și <strong><code>ventilatie</code></strong>. Ventilația a fost pornită de <em>alt client</em> (Inspector). Toți clienții lucrează pe <strong>același obiect <code>cladire</code></strong> din procesul serverului. Starea aparține serverului, nu conexiunii.</li>
+    <li>După rulare, <code>get_building_state</code> din Inspector întoarce <code>{"pornite": [], "termostat_c": 21.0}</code>, deci ventilația a dispărut. A oprit-o <strong><code>client_demo.py</code></strong>: la final, clientul Anei apelează <code>reset_building</code> („curățenie”), care oprește <em>toate</em> dispozitivele, inclusiv ventilația pornită din Inspector. Un client a anulat, fără să știe, acțiunea altui client.</li>
+  </ul>
+</section>
+
+<section class="ex" id="b2">
+  <h3><span class="id">B2</span> Repornirea</h3>
+  <p class="q">Opriți și reporniți serverul. Ce s-a întâmplat cu starea? Ce ar trebui schimbat ca starea să supraviețuiască repornirii?</p>
+  <p>Înainte de oprire am pornit <code>lampa_led</code>. După repornire, <code>get_building_state</code> întoarce <code>{"pornite": [], "termostat_c": 21.0}</code>. <strong>Starea s-a pierdut</strong> și a revenit la valorile implicite. Ea exista doar în memoria procesului (<code>cladire = Building()</code> se creează din nou la fiecare pornire).</p>
+  <p><strong>Ce trebuie schimbat:</strong> starea trebuie <strong>persistată în afara procesului</strong>:</p>
+  <ul>
+    <li><strong>Varianta simplă:</strong> un fișier JSON sau o bază SQLite. <code>Building</code> încarcă starea la pornire (în <code>__init__</code>) și o salvează după fiecare modificare (<code>set_device</code>, <code>set_thermostat</code>, <code>reset</code>). Scrierea trebuie să fie atomică: se scrie un fișier temporar, apoi se redenumește.</li>
+    <li><strong>Pentru mai multe instanțe de server</strong> în spatele unui echilibrator de încărcare: o stocare comună (PostgreSQL, Redis), cu tranzacții sau blocări. Altfel, două cereri simultane pot porni radiatorul și aerul condiționat, ocolind verificarea de conflict.</li>
+  </ul>
+  <p>Modificarea se face în <code>building.py</code>, care deține starea. <code>server.py</code> rămâne neschimbat.</p>
+</section>
+
+<section class="ex" id="b3">
+  <h3><span class="id">B3</span> Agentul <span class="tag warn">opțional, model real</span></h3>
+  <p class="q">După modificarea din 4.4, cereți agentului „Pornește radiatorul”. Verificați în Inspector cu get_building_state.</p>
+  <p>Modificarea în <code>agent.py</code> (linia 93):</p>
+<pre><code>self.mcp = Client(SERVER)                        # înainte: stdio, proces copil
+self.mcp = Client("http://127.0.0.1:8000/mcp")   # acum: serverul HTTP partajat</code></pre>
+  <p>La cererea „Pornește radiatorul”, agentul ar trebui să aleagă <code>set_device_state</code> cu <code>{"name": "radiator", "on": true}</code>. Schema îi oferă valorile exacte în <code>enum</code>, deci nu trebuie să ghicească numele. Apoi, <code>get_building_state</code> din Inspector ar trebui să întoarcă <code>{"pornite": ["radiator"], "termostat_c": 21.0}</code>. Efectul ar trebui să se vadă imediat, pentru că agentul și Inspector sunt doi clienți ai aceluiași proces server, la fel ca în B1.</p>
+  <p class="note">Exercițiul cere un model real (de exemplu Gemini) și nu a fost rulat aici. Mai sus este descris rezultatul așteptat, dedus din comportamentul observat în B1.</p>
+</section>
+
+<section class="ex" id="b4">
+  <h3><span class="id">B4</span> Discuție: starea partajată</h3>
+  <p class="q">Un exemplu în care starea partajată este dorită, unul în care este o problemă. Cum ar arăta instrumentul care creează un handle?</p>
+  <ul>
+    <li><span class="tag ok">Dorită</span> Clădirea reală are o singură stare fizică. Administratorul (din panou), aplicația mobilă a unui locatar și agentul AI trebuie să vadă aceeași realitate. Dacă cineva a pornit radiatorul, agentul trebuie să știe asta ca să nu pornească aerul condiționat. Regula de conflict funcționează doar <em>pentru că</em> starea e comună (vezi mesajul lui Bogdan din B1).</li>
+    <li><span class="tag err">Problemă</span> Mai mulți studenți sau teste automate folosesc același server de laborator. Unul rulează <code>reset_building</code> și distruge experimentul altuia (exact ce s-a întâmplat cu ventilația în B1). Similar, un agent care face o simulare „ce-ar fi dacă” nu ar trebui să modifice starea reală a clădirii.</li>
+  </ul>
+  <p><strong>Instrumentul care creează un handle:</strong> serverul ține un dicționar <code>scenario_id → Building</code>, iar fiecare instrument primește identificatorul ca argument obișnuit:</p>
+<pre><code>class ScenarioCreated(BaseModel):
+    scenario_id: str = Field(description="Identificatorul de transmis la apelurile următoare.")
+    expira_la: str   = Field(description="Momentul expirării (ISO 8601, UTC).")
+
+@mcp.tool(annotations=MODIFICARE)
+def create_scenario(copiaza_starea_reala: bool = False) -&gt; ScenarioCreated:
+    """Creează o clădire simulată, separată de celelalte, și întoarce identificatorul ei."""
+    ...
+
+@mcp.tool(annotations=MODIFICARE)
+def set_device_state(scenario_id: str, name: DeviceName, on: bool) -&gt; BuildingState: ...
+
+@mcp.tool(annotations=CITIRE)
+def get_building_state(scenario_id: str) -&gt; BuildingState: ...
+
+@mcp.tool(annotations=DISTRUGERE)
+def delete_scenario(scenario_id: str) -&gt; None: ...</code></pre>
+  <p>Exemplu de răspuns: <code>{"scenario_id": "scn_7f3a9c", "expira_la": "2026-10-29T20:00:00Z"}</code>. Fiecare client lucrează în propriul scenariu, iar starea nu depinde de conexiune. Dacă scenariile sunt păstrate într-o stocare comună (de exemplu Redis), orice instanță a serverului poate răspunde la orice cerere.</p>
+</section>
+
+<!-- =============================== C =============================== -->
+<h2 id="c">5.3. Exerciții (C) — trimiterea de mesaje</h2>
+<p class="lead">Toate cererile sunt trimise cu <code>raw_client.py</code> către serverul HTTP.</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>Experiment</th><th>HTTP</th><th>result / error</th><th>Cod JSON-RPC</th><th>Mesaj</th></tr></thead>
+  <tbody>
+    <tr><td><code>fara-antet</code></td><td class="num">400</td><td><span class="tag err">error</span></td><td class="num">-32020</td><td>mcp-name header does not match the request body's 'name' parameter</td></tr>
+    <tr><td><code>antet-gresit</code></td><td class="num">400</td><td><span class="tag err">error</span></td><td class="num">-32020</td><td>mcp-name header does not match the request body's 'name' parameter</td></tr>
+    <tr><td><code>versiune</code></td><td class="num">400</td><td><span class="tag err">error</span></td><td class="num">-32022</td><td>Unsupported protocol version</td></tr>
+    <tr><td><code>metoda</code></td><td class="num">404</td><td><span class="tag err">error</span></td><td class="num">-32601</td><td>Method not found</td></tr>
+    <tr><td><code>instrument</code></td><td class="num">200</td><td><span class="tag ok">result</span> + <code>isError: true</code></td><td class="num">—</td><td>Unknown tool: 'porneste_tot'</td></tr>
+    <tr><td><code>origin</code> (protecție <code>True</code>)</td><td class="num">403</td><td>niciunul (nu e JSON-RPC)</td><td class="num">—</td><td>Forbidden Origin (text simplu)</td></tr>
+    <tr><td><code>origin</code> (protecție <code>False</code>)</td><td class="num">200</td><td><span class="tag ok">result</span></td><td class="num">—</td><td>lista completă a instrumentelor</td></tr>
+  </tbody>
+</table></div>
+
+<section class="ex" id="c1">
+  <h3><span class="id">C1</span> Antetele</h3>
+  <p class="q">fara-antet și antet-gresit. Ce verifică serverul? De ce contează potrivirea antet-corp, dacă serverul citește oricum corpul?</p>
+<pre><code>HTTP 400
+{ "jsonrpc": "2.0", "id": 1,
+  "error": { "code": -32020,
+             "message": "mcp-name header does not match the request body's 'name' parameter" } }</code></pre>
+  <p><strong>Ce verifică:</strong> antetele <code>Mcp-Method</code> și (pentru <code>tools/call</code>) <code>Mcp-Name</code> trebuie să existe și să aibă aceleași valori ca <code>method</code> și <code>params.name</code> din corp. Lipsa antetului (<code>fara-antet</code>) și o valoare diferită (<code>antet-gresit</code>: antet <code>reset_building</code>, corp <code>get_device_info</code>) produc același refuz, cu eroare de protocol <code>-32020</code>, înainte de rularea instrumentului.</p>
+  <p><strong>De ce contează:</strong> antetele nu sunt citite de server, ci de <em>intermediari</em>: echilibratorul de încărcare, gateway-ul API, firewall-ul, limitatorul de rată, jurnalele. Aceștia decid pe baza antetelor, fără să parseze JSON-ul. De exemplu, un firewall permite instrumentele de citire și blochează <code>reset_building</code>. Dacă serverul ar accepta nepotriviri, un atacator ar trimite antetul <code>Mcp-Name: get_device_info</code> (permis) cu corpul <code>reset_building</code>. Firewall-ul ar lăsa cererea să treacă, iar serverul ar executa resetarea. Verificarea antet-corp garantează că se execută exact ce a aprobat intermediarul.</p>
+</section>
+
+<section class="ex" id="c2">
+  <h3><span class="id">C2</span> Versiunea</h3>
+  <p class="q">Ce informație din răspuns i-ar permite unui client să reîncerce corect?</p>
+<pre><code>HTTP 400
+{ "jsonrpc": "2.0", "id": 1,
+  "error": { "code": -32022,
+             "message": "Unsupported protocol version",
+             "data": { "supported": ["2026-07-28"], "requested": "2030-01-01" } } }</code></pre>
+  <p>Câmpul <strong><code>error.data.supported</code></strong> conține lista versiunilor acceptate de server. Clientul alege din ea cea mai nouă versiune pe care o cunoaște și el (aici <code>2026-07-28</code>) și retrimite cererea, cu acea versiune în antetul <code>MCP-Protocol-Version</code> și în <code>params._meta</code>. <code>data.requested</code> confirmă ce valoare a primit serverul. Aceeași listă se poate obține și dinainte, din <code>server/discover</code> (<code>supportedVersions</code>).</p>
+</section>
+
+<section class="ex" id="c3">
+  <h3><span class="id">C3</span> Metoda</h3>
+  <p class="q">python raw_client.py metoda. Eroare de protocol sau de execuție?</p>
+<pre><code>HTTP 404
+{ "jsonrpc": "2.0", "id": 1,
+  "error": { "code": -32601, "message": "Method not found", "data": "tools/run" } }</code></pre>
+  <p><strong>Eroare de protocol.</strong> Răspunsul are câmpul <code>error</code> (nu <code>result</code>), cu codul JSON-RPC standard <code>-32601 Method not found</code>, iar HTTP întoarce 404. Metoda <code>tools/run</code> nu există, metoda corectă fiind <code>tools/call</code>. Greșeala aparține programatorului clientului. Modelul nu o poate corecta, pentru că nu alege metodele JSON-RPC.</p>
+</section>
+
+<section class="ex" id="c4">
+  <h3><span class="id">C4</span> Instrumentul inexistent</h3>
+  <p class="q">Specificația dă „instrument necunoscut” ca exemplu de eroare de protocol (-32602). Ce întoarce FastMCP? Un argument pentru fiecare variantă, din punctul de vedere al unui agent cu LLM.</p>
+<pre><code>HTTP 200
+{ "jsonrpc": "2.0", "id": 1,
+  "result": { "content": [{ "type": "text", "text": "Unknown tool: 'porneste_tot'" }],
+              "isError": true,
+              "resultType": "complete" } }</code></pre>
+  <p>FastMCP <strong>nu</strong> respectă exemplul din specificație. Întoarce o <strong>eroare de execuție</strong> (<code>result</code> cu <code>isError: true</code>, HTTP 200), nu o eroare de protocol cu <code>-32602</code>.</p>
+  <ul>
+    <li><strong>Pentru eroare de protocol (<code>-32602</code>, varianta din specificație):</strong> lista instrumentelor se poate afla oricând cu <code>tools/list</code>. Un apel către un instrument inexistent înseamnă că gazda are o listă învechită sau o eroare de cod. Eroarea de protocol ajunge la codul gazdei, care o poate trata direct: reîmprospătează <code>tools/list</code>, refuză cererea, scrie în jurnal. Nu consumă un pas al modelului și nu îi expune modelului detalii interne. Intermediarii și sistemele de monitorizare o pot detecta după cod.</li>
+    <li><strong>Pentru eroare de execuție (varianta FastMCP):</strong> la un agent, numele inexistent provine de obicei dintr-o <em>halucinație a modelului</em>. Majoritatea buclelor de agent trimit înapoi la model doar rezultatele (<code>content</code>), iar erorile de protocol devin excepții care opresc bucla sau se pierd. Cu <code>isError: true</code>, modelul citește „Unknown tool: 'porneste_tot'” la pasul următor și se poate corecta singur, alegând un instrument real. Aceasta este exact definiția erorii de execuție: o eroare pe care modelul o poate corecta.</li>
+  </ul>
+</section>
+
+<section class="ex" id="c5">
+  <h3><span class="id">C5</span> Originea</h3>
+  <p class="q">python raw_client.py origin, cu host_origin_protection=True și apoi False.</p>
+  <div class="cols">
+    <div>
+      <p class="label"><code>host_origin_protection=True</code></p>
+<pre><code>Origin: http://site-strain.example
+
+HTTP 403  (fără content-type)
+Forbidden Origin</code></pre>
+    </div>
+    <div>
+      <p class="label"><code>host_origin_protection=False</code></p>
+<pre><code>Origin: http://site-strain.example
+
+HTTP 200  (application/json)
+{ "jsonrpc": "2.0", "id": 1,
+  "result": { "tools": [ ...toate 8... ] } }</code></pre>
+    </div>
+  </div>
+  <ul>
+    <li><strong>Cu protecția pornită:</strong> cererea e oprită la nivel HTTP, înainte să ajungă la MCP. Răspunsul e 403 cu textul simplu „Forbidden Origin”, fără JSON-RPC, deci fără <code>result</code>, <code>error</code> sau cod de eroare.</li>
+    <li><strong>Cu protecția oprită:</strong> serverul acceptă cererea venită de pe o pagină străină și întoarce lista completă a instrumentelor. O pagină web malițioasă deschisă în browser (prin DNS rebinding) ar putea apela la fel <code>set_device_state</code> sau <code>reset_building</code> pe serverul local. Specificația cere obligatoriu validarea <code>Origin</code>, dar FastMCP 4 o lasă oprită implicit.</li>
+    <li>Valoarea a fost readusă la <code>host_origin_protection=True</code>.</li>
+  </ul>
+</section>
+
+<section class="ex" id="c6">
+  <h3><span class="id">C6</span> Cele două ere în Inspector</h3>
+  <p class="q">Care este primul mesaj trimis în fiecare caz? Ce mesaj apare doar în varianta veche?</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Era</th><th>Primul mesaj (cel mai de jos în Newest First)</th><th>Ce urmează</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag ok">MODERN</span><br><code>--protocol-era modern</code></td>
+        <td><code>server/discover</code>: clientul află versiunile și capabilitățile serverului.</td>
+        <td>Direct <code>tools/list</code> etc. Fiecare cerere poartă singură versiunea și capabilitățile în <code>params._meta</code>. Nu există sesiune.</td>
+      </tr>
+      <tr>
+        <td><span class="tag warn">LEGACY</span><br>fără opțiune</td>
+        <td><code>initialize</code>, cu <code>protocolVersion</code>, <code>capabilities</code>, <code>clientInfo</code>.</td>
+        <td>Serverul răspunde și trimite antetul <code>Mcp-Session-Id</code>. Clientul trimite notificarea <code>notifications/initialized</code>, apoi cererile obișnuite, toate cu același <code>Mcp-Session-Id</code>.</td>
+      </tr>
+    </tbody>
+  </table></div>
+  <p>Doar în varianta veche apar <strong><code>initialize</code></strong> și, mai ales, notificarea <strong><code>notifications/initialized</code></strong> (fără <code>id</code>, fără răspuns), plus antetul de sesiune <code>Mcp-Session-Id</code>. Un apel <code>initialize</code> trimis manual confirmă că serverul acceptă și era veche: răspunde cu <code>protocolVersion: "2025-11-25"</code>, un <code>Mcp-Session-Id</code> și un flux SSE (<code>text/event-stream</code>).</p>
+</section>
+
+<!-- =============================== Temă =============================== -->
+<h2 id="tema">7. Temă, punctul 4 — handle-uri</h2>
+<p class="lead">Un paragraf (maximum 15 rânduri) despre un server de clădire cu <code>scenario_id</code>.</p>
+
+<section class="ex">
+  <p>Un server de clădire cu handle-uri ar avea un instrument de creare, <code>create_scenario(copiaza_starea_reala=False)</code>, care întoarce un <code>scenario_id</code> opac și greu de ghicit (de exemplu <code>scn_</code> + un UUID) și momentul expirării. Instrumentele existente ar primi <code>scenario_id</code> ca prim argument: <code>set_device_state</code>, <code>set_thermostat</code>, <code>get_building_state</code>, <code>reset_building</code>, <code>estimate_building_power</code>. Ar mai exista <code>list_scenarios</code> și <code>delete_scenario</code> pentru eliberarea explicită. Instrumentele fără stare (<code>get_device_info</code>, <code>check_conflict</code>, <code>estimate_energy</code>) nu au nevoie de handle. Un scenariu ar trăi printr-un TTL glisant, de exemplu 30 de minute de la ultima folosire, cu o limită maximă (24 de ore) și un număr maxim de scenarii per client, ca memoria să nu crească nelimitat. Scenariile s-ar păstra într-o stocare comună (Redis cu expirare), pentru ca orice instanță a serverului să poată răspunde. La un identificator expirat sau necunoscut, instrumentul ar întoarce o <strong>eroare de execuție</strong> (<code>isError: true</code>) cu un mesaj explicit, de exemplu „Scenariul scn_… a expirat sau nu există. Creați altul cu create_scenario.” Modelul ar putea astfel să se corecteze singur. Serverul nu ar recrea niciodată scenariul în tăcere și nu ar folosi starea reală în locul lui, pentru că acțiunile s-ar aplica unei alte clădiri decât cea pe care o crede clientul.</p>
+</section>
+
+<footer>
+  Rezultatele de la (A), (B1), (B2) și (C) sunt obținute rulând <code>server.py</code>, <code>client_demo.py</code> și <code>raw_client.py</code> din acest proiect (FastMCP 4.1.4).
+</footer>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Temă Laborator 03</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --surface-2: #f3f1ec;
+    --text: #1f2328;
+    --muted: #5d6470;
+    --border: #e2ded5;
+    --accent: #2f5fa7;
+    --ok: #1f7a4d;
+    --ok-bg: #e5f4ec;
+    --err: #b3261e;
+    --err-bg: #fbe9e7;
+    --add: #1f7a4d;
+    --add-bg: #e9f6ee;
+    --code-bg: #f5f3ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a;
+      --surface: #1c1f23;
+      --surface-2: #23272d;
+      --text: #e6e6e3;
+      --muted: #a1a7b0;
+      --border: #30353c;
+      --accent: #8fb4ec;
+      --ok: #6fcf9a;
+      --ok-bg: #173226;
+      --err: #f08a80;
+      --err-bg: #3a1f1d;
+      --add: #6fcf9a;
+      --add-bg: #15291f;
+      --code-bg: #111316;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a;
+    --surface: #1c1f23;
+    --surface-2: #23272d;
+    --text: #e6e6e3;
+    --muted: #a1a7b0;
+    --border: #30353c;
+    --accent: #8fb4ec;
+    --ok: #6fcf9a;
+    --ok-bg: #173226;
+    --err: #f08a80;
+    --err-bg: #3a1f1d;
+    --add: #6fcf9a;
+    --add-bg: #15291f;
+    --code-bg: #111316;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+  header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+  header h1 { font-size: 1.85rem; line-height: 1.25; margin: 0 0 6px; }
+  header p { margin: 0; color: var(--muted); }
+
+  nav.toc {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 36px; font-size: .95rem;
+  }
+  nav.toc strong { display: block; margin-bottom: 6px; }
+  nav.toc a { color: var(--accent); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  nav.toc ol { margin: 0; padding-left: 22px; }
+
+  h2 {
+    font-size: 1.35rem; margin: 48px 0 6px; padding-top: 8px;
+    border-top: 2px solid var(--text);
+  }
+  h2 .nr { color: var(--accent); }
+  h2 + .lead { color: var(--muted); margin: 0 0 18px; font-size: .95rem; }
+
+  section.ex {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px 6px; margin: 16px 0;
+  }
+  section.ex h3 { margin: 0 0 8px; font-size: 1.08rem; }
+  section.ex p, section.ex ul { margin: 0 0 12px; }
+  section.ex ul { padding-left: 20px; }
+  section.ex li { margin-bottom: 4px; }
+  a { color: var(--accent); }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .88em; background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 0 4px;
+  }
+  pre {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .82rem; line-height: 1.5; background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 0 0 14px;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+  pre .add { display: block; background: var(--add-bg); color: var(--add); margin: 0 -14px; padding: 0 14px; }
+  pre .dim { color: var(--muted); }
+  .label { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 4px; }
+
+  .tag {
+    display: inline-block; font-size: .78rem; font-weight: 600; border-radius: 999px;
+    padding: 1px 9px; vertical-align: 1px; white-space: nowrap;
+  }
+  .tag.ok { color: var(--ok); background: var(--ok-bg); }
+
+  .note {
+    border-left: 3px solid var(--accent); background: var(--surface-2);
+    padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 0 0 14px; font-size: .94rem;
+  }
+
+  .table-wrap { overflow-x: auto; margin: 0 0 14px; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { border-bottom: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+  footer { margin-top: 56px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); padding-top: 14px; }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>Laborator 03 — Temă</h1>
+  <p>Instrumentul nou <code>estimate_building_power</code>, apelul lui prin <code>raw_client.py</code> și paragraful despre handle-uri.
+     Mediu: FastMCP 4.1.4, protocol MCP 2026-07-28.</p>
+</header>
+
+<nav class="toc" aria-label="Cuprins">
+  <strong>Cuprins</strong>
+  <ol>
+    <li><a href="#p1">Răspunsurile la exercițiile (A), (B), (C)</a></li>
+    <li><a href="#p2">Instrumentul nou: estimate_building_power</a></li>
+    <li><a href="#p3">Cererea și răspunsul complete (raw_client.py)</a></li>
+    <li><a href="#p4">Paragraful despre handle-uri</a></li>
+  </ol>
+</nav>
+
+<!-- =============================== 1 =============================== -->
+<h2 id="p1"><span class="nr">1.</span> Răspunsurile la exercițiile (A), (B), (C)</h2>
+<section class="ex">
+  <p>Răspunsurile sunt într-un document separat: <a href="raspunsuri_lab03.html">raspunsuri_lab03.html</a> (A1–A5, B1–B4, C1–C6).</p>
+</section>
+
+<!-- =============================== 2 =============================== -->
+<h2 id="p2"><span class="nr">2.</span> Instrumentul nou: <code>estimate_building_power</code></h2>
+<p class="lead">Instrument de citire care întoarce puterea totală a dispozitivelor pornite, în W, și lista lor. Logica este în <code>building.py</code>, iar instrumentul în <code>server.py</code>.</p>
+
+<section class="ex">
+  <h3>Logica, în <code>building.py</code></h3>
+  <p>Am adăugat o metodă nouă în secțiunea de citire a clasei <code>Building</code>. Modulul rămâne fără nicio dependență de MCP:</p>
+<pre><code><span class="dim">    def state(self) -&gt; dict:
+        return {"pornite": sorted(self.pornite), "termostat_c": self.termostat_c}
+</span>
+<span class="add">    def power_w(self) -&gt; dict:</span><span class="add">        dispozitive = [{"nume": n, "putere_w": DEVICES[n]["putere_w"]} for n in sorted(self.pornite)]</span><span class="add">        return {"putere_totala_w": sum(d["putere_w"] for d in dispozitive), "dispozitive": dispozitive}</span></code></pre>
+  <p>Testul rapid din <code>__main__</code> (<code>python building.py</code>) apelează și metoda nouă:</p>
+<pre><code><span class="dim">    print(b.state())</span>
+<span class="add">    b.set_device("lampa_led", True)</span><span class="add">    print(b.power_w())</span></code></pre>
+  <p class="label">Ieșirea lui python building.py</p>
+<pre><code>{'nume': 'radiator', 'categorie': 'încălzire', 'putere_w': 1500, 'note': 'Controlat de termostatul camerei.'}
+3.0
+Refuzat: Nu pornesc aer_conditionat: conflict RIDICAT cu radiator, care este pornit. Încălzire și răcire simultană, consum inutil.
+{'pornite': ['radiator'], 'termostat_c': 21.0}
+{'putere_totala_w': 1510, 'dispozitive': [{'nume': 'lampa_led', 'putere_w': 10}, {'nume': 'radiator', 'putere_w': 1500}]}</code></pre>
+</section>
+
+<section class="ex">
+  <h3>Instrumentul, în <code>server.py</code></h3>
+  <p>Două modele Pydantic pentru ieșire, lângă celelalte scheme:</p>
+<pre><code><span class="add">class DevicePower(BaseModel):</span><span class="add">    nume: str</span><span class="add">    putere_w: int = Field(description="Puterea nominală, în wați.")</span>
+<span class="add">class BuildingPower(BaseModel):</span><span class="add">    putere_totala_w: int = Field(description="Suma puterilor dispozitivelor pornite, în wați.")</span><span class="add">    dispozitive: list[DevicePower] = Field(description="Dispozitivele pornite, în ordine alfabetică.")</span></code></pre>
+  <p>Instrumentul, adăugat la instrumentele de citire, după <code>get_building_state</code>:</p>
+<pre><code><span class="add">@mcp.tool(annotations=CITIRE)</span><span class="add">def estimate_building_power() -&gt; BuildingPower:</span><span class="add">    """Returnează puterea totală (W) a dispozitivelor pornite și lista lor, cu puterea fiecăruia."""</span><span class="add">    return BuildingPower(**cladire.power_w())</span></code></pre>
+  <ul>
+    <li><code>annotations=CITIRE</code> (<code>readOnlyHint: true</code>) arată clientului că instrumentul nu modifică starea clădirii.</li>
+    <li>Instrumentul nu are argumente, deci nu poate primi date greșite. Din același motiv nu are nevoie de <code>_domeniu</code>: <code>power_w</code> nu ridică <code>BuildingError</code>.</li>
+    <li>Tipul de retur este un model Pydantic, deci FastMCP generează <code>outputSchema</code> și completează automat <code>structuredContent</code>. Modelul imbricat <code>DevicePower</code> apare ca schemă de obiect în <code>items</code>.</li>
+  </ul>
+</section>
+
+<section class="ex">
+  <h3>Verificarea <code>outputSchema</code></h3>
+  <p>Descrierea instrumentului, așa cum apare în <code>tools/list</code>. Inspector afișează aceleași date în tab-ul Tools.</p>
+<pre><code>{
+  "name": "estimate_building_power",
+  "title": "Estimate Building Power",
+  "description": "Returnează puterea totală (W) a dispozitivelor pornite și lista lor, cu puterea fiecăruia.",
+  "annotations": { "readOnlyHint": true },
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "putere_totala_w": {
+        "description": "Suma puterilor dispozitivelor pornite, în wați.",
+        "type": "integer"
+      },
+      "dispozitive": {
+        "description": "Dispozitivele pornite, în ordine alfabetică.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "nume": { "type": "string" },
+            "putere_w": { "description": "Puterea nominală, în wați.", "type": "integer" }
+          },
+          "required": ["nume", "putere_w"]
+        }
+      }
+    },
+    "required": ["putere_totala_w", "dispozitive"]
+  },
+  "_meta": { "fastmcp": { "tags": [] } }
+}</code></pre>
+  <ul>
+    <li>Schema este de tip <code>object</code>, deci, spre deosebire de <code>list_devices</code> (A3), FastMCP nu o împachetează sub cheia <code>result</code> și nu apare <code>x-fastmcp-wrap-result</code>.</li>
+    <li>Descrierile din <code>Field(description=...)</code> ajung în schemă și le vede și modelul.</li>
+    <li><code>inputSchema</code> este gol și are <code>additionalProperties: false</code>, deci orice argument trimis în plus e respins.</li>
+  </ul>
+</section>
+
+<!-- =============================== 3 =============================== -->
+<h2 id="p3"><span class="nr">3.</span> Cererea și răspunsul complete (<code>raw_client.py</code>)</h2>
+<p class="lead">Server pornit pe HTTP. Am pornit trei dispozitive, ca rezultatul să fie interesant, apoi am apelat instrumentul nou.</p>
+
+<section class="ex">
+  <h3>Comenzile</h3>
+<pre><code>python server.py http                                     <span class="dim"># în alt terminal</span>
+python raw_client.py call set_device_state name=radiator on=true
+python raw_client.py call set_device_state name=lampa_led on=true
+python raw_client.py call set_device_state name=ventilatie on=true
+python raw_client.py call estimate_building_power</code></pre>
+  <p class="note">Portul 8000 era ocupat de o altă instanță a serverului, pornită cu codul vechi. De aceea serverul actualizat a rulat pe portul 8001, iar <code>raw_client.py</code> a fost îndreptat spre aceeași adresă. Mesajele JSON-RPC și antetele MCP nu depind de port.</p>
+</section>
+
+<section class="ex">
+  <h3>Cererea <span class="tag ok">tools/call</span></h3>
+<pre><code>&gt;&gt;&gt; CERERE  POST http://127.0.0.1:8001/mcp
+    Content-Type: application/json
+    Accept: application/json, text/event-stream
+    MCP-Protocol-Version: 2026-07-28
+    Mcp-Method: tools/call
+    Mcp-Name: estimate_building_power
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "estimate_building_power",
+    "arguments": {},
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "raw-client",
+        "version": "1.0"
+      },
+      "io.modelcontextprotocol/clientCapabilities": {}
+    }
+  }
+}</code></pre>
+  <ul>
+    <li><code>Mcp-Method</code> și <code>Mcp-Name</code> copiază <code>method</code> și <code>params.name</code> din corp, iar serverul verifică potrivirea lor (C1).</li>
+    <li>Nu există <code>initialize</code> și nici sesiune. Versiunea, identitatea și capabilitățile clientului sunt trimise în <code>params._meta</code>.</li>
+    <li><code>arguments</code> este un obiect gol, conform <code>inputSchema</code>.</li>
+  </ul>
+</section>
+
+<section class="ex">
+  <h3>Răspunsul <span class="tag ok">HTTP 200</span></h3>
+<pre><code>&lt;&lt;&lt; RĂSPUNS  HTTP 200  (application/json)
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "text": "{\"putere_totala_w\":1630,\"dispozitive\":[{\"nume\":\"lampa_led\",\"putere_w\":10},{\"nume\":\"radiator\",\"putere_w\":1500},{\"nume\":\"ventilatie\",\"putere_w\":120}]}",
+        "type": "text"
+      }
+    ],
+    "isError": false,
+    "resultType": "complete",
+    "structuredContent": {
+      "putere_totala_w": 1630,
+      "dispozitive": [
+        {
+          "nume": "lampa_led",
+          "putere_w": 10
+        },
+        {
+          "nume": "radiator",
+          "putere_w": 1500
+        },
+        {
+          "nume": "ventilatie",
+          "putere_w": 120
+        }
+      ]
+    },
+    "_meta": {
+      "io.modelcontextprotocol/serverInfo": {
+        "name": "smart-building-demo",
+        "version": "3.0"
+      }
+    }
+  }
+}</code></pre>
+  <ul>
+    <li>Răspunsul are același <code>id</code> ca cererea (1) și conține <code>result</code>, nu <code>error</code>. <code>isError: false</code>, <code>resultType: "complete"</code>.</li>
+    <li><code>structuredContent</code> respectă <code>outputSchema</code>, iar <code>content</code> conține același JSON ca text, pentru compatibilitate (A2).</li>
+    <li>Calculul se verifică: 10 + 1500 + 120 = <strong>1630 W</strong>.</li>
+  </ul>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Dispozitiv pornit</th><th style="text-align:right">Putere (W)</th></tr></thead>
+    <tbody>
+      <tr><td><code>lampa_led</code></td><td class="num">10</td></tr>
+      <tr><td><code>radiator</code></td><td class="num">1500</td></tr>
+      <tr><td><code>ventilatie</code></td><td class="num">120</td></tr>
+      <tr><td><strong>Total</strong></td><td class="num"><strong>1630</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p class="label">Cazul limită: niciun dispozitiv pornit</p>
+<pre><code>"content": [{ "type": "text", "text": "{\"putere_totala_w\":0,\"dispozitive\":[]}" }],
+"isError": false,
+"structuredContent": { "putere_totala_w": 0, "dispozitive": [] }</code></pre>
+</section>
+
+<!-- =============================== 4 =============================== -->
+<h2 id="p4"><span class="nr">4.</span> Paragraful despre handle-uri</h2>
+<p class="lead">Ce instrumente ar avea un server de clădire cu <code>scenario_id</code>, cât ar trăi un scenariu și ce s-ar întâmpla la un identificator expirat.</p>
+
+<section class="ex">
+  <p>Un server de clădire cu handle-uri ar avea un instrument de creare, <code>create_scenario(copiaza_starea_reala=False)</code>, care întoarce un <code>scenario_id</code> opac și greu de ghicit (de exemplu <code>scn_</code> + un UUID) și momentul expirării. Instrumentele existente ar primi <code>scenario_id</code> ca prim argument: <code>set_device_state</code>, <code>set_thermostat</code>, <code>get_building_state</code>, <code>reset_building</code>, <code>estimate_building_power</code>. Ar mai exista <code>list_scenarios</code> și <code>delete_scenario</code> pentru eliberarea explicită. Instrumentele fără stare (<code>get_device_info</code>, <code>check_conflict</code>, <code>estimate_energy</code>) nu au nevoie de handle. Un scenariu ar trăi printr-un TTL glisant, de exemplu 30 de minute de la ultima folosire, cu o limită maximă (24 de ore) și un număr maxim de scenarii per client, ca memoria să nu crească nelimitat. Scenariile s-ar păstra într-o stocare comună (Redis cu expirare), pentru ca orice instanță a serverului să poată răspunde. La un identificator expirat sau necunoscut, instrumentul ar întoarce o <strong>eroare de execuție</strong> (<code>isError: true</code>) cu un mesaj explicit, de exemplu „Scenariul scn_… a expirat sau nu există. Creați altul cu create_scenario.” Modelul ar putea astfel să se corecteze singur. Serverul nu ar recrea niciodată scenariul în tăcere și nu ar folosi starea reală în locul lui, pentru că acțiunile s-ar aplica unei alte clădiri decât cea pe care o crede clientul.</p>
+</section>
+
+<footer>
+  Codul este în <code>building.py</code> (metoda <code>power_w</code>) și <code>server.py</code> (modelele <code>DevicePower</code>, <code>BuildingPower</code> și instrumentul <code>estimate_building_power</code>). Toate ieșirile de mai sus provin din rulări reale.
+</footer>
+
+</main>
+</body>
+</html>

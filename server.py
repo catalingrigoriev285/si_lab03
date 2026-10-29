@@ -54,6 +54,16 @@ class BuildingState(BaseModel):
     termostat_c: float = Field(description="Temperatura dorită, în °C.")
 
 
+class DevicePower(BaseModel):
+    nume: str
+    putere_w: int = Field(description="Puterea nominală, în wați.")
+
+
+class BuildingPower(BaseModel):
+    putere_totala_w: int = Field(description="Suma puterilor dispozitivelor pornite, în wați.")
+    dispozitive: list[DevicePower] = Field(description="Dispozitivele pornite, în ordine alfabetică.")
+
+
 def _domeniu(fn, *args):
     """Traduce o eroare de domeniu într-o eroare de execuție MCP (isError: true)."""
     try:
@@ -96,6 +106,12 @@ def estimate_energy(
 def get_building_state() -> BuildingState:
     """Returnează starea curentă a clădirii: dispozitivele pornite și termostatul."""
     return BuildingState(**cladire.state())
+
+
+@mcp.tool(annotations=CITIRE)
+def estimate_building_power() -> BuildingPower:
+    """Returnează puterea totală (W) a dispozitivelor pornite și lista lor, cu puterea fiecăruia."""
+    return BuildingPower(**cladire.power_w())
 
 
 # ---------- Instrumente cu efecte ----------

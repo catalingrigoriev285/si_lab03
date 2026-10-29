@@ -90,7 +90,8 @@ class Agent:
         """`confirm(nume, argumente, distructiv) -> bool` decide dacă un instrument cu efecte
         poate rula. Fără `confirm`, instrumentele cu efecte sunt refuzate."""
         self.llm, self.model, self.provider = make_client()
-        self.mcp = Client(SERVER)  # pornește server.py ca proces copil (stdio)
+        # self.mcp = Client(SERVER)  # pornește server.py ca proces copil (stdio)
+        self.mcp = Client("http://127.0.0.1:8000/mcp")
         self.confirm = confirm
         self.log = JsonlLog()
         self.tools = []

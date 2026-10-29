@@ -57,6 +57,10 @@ class Building:
     def state(self) -> dict:
         return {"pornite": sorted(self.pornite), "termostat_c": self.termostat_c}
 
+    def power_w(self) -> dict:
+        dispozitive = [{"nume": n, "putere_w": DEVICES[n]["putere_w"]} for n in sorted(self.pornite)]
+        return {"putere_totala_w": sum(d["putere_w"] for d in dispozitive), "dispozitive": dispozitive}
+
     # ---------- modificare ----------
 
     def set_device(self, name: str, on: bool) -> None:
@@ -98,3 +102,5 @@ if __name__ == "__main__":
     except BuildingError as e:
         print("Refuzat:", e)
     print(b.state())
+    b.set_device("lampa_led", True)
+    print(b.power_w())

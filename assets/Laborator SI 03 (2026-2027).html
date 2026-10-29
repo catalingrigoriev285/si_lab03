@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="single-html-export v0.10.0">
+  <!-- Third-party notices for what is inlined in this file:
+       · Lucide (ISC) https://lucide.dev — icon artwork. (c) Lucide Icons and Contributors;
+         Feather-derived parts (c) Cole Bemis (MIT).
+       · jelly-ui (MIT) https://jelly-ui.com — design tokens and component vocabulary.
+       고지를 저장소 README 에만 두지 않는 이유: 이 파일은 손을 떠나 **혼자 돌아다니는 사본**이고,
+       두 라이선스 다 「사본에 고지를 포함하라」 고 요구한다. 저장소를 못 보는 사본이 기본값이다. -->
+  <title>Laborator 03</title>
+  <style>
+    @font-face {
+      font-family: "Pretendard Local";
+      src: local("Pretendard Variable"), local("PretendardVariable"), local("Pretendard");
+      font-weight: 45 920;
+      font-display: swap;
+    }
+
+    /* Jelly-UI 디자인 시스템 토큰 */
+    :root, [data-theme="light"] {
+      --jelly-bg-page: #f8fafc;
+      --jelly-bg-card: #ffffff;
+      --jelly-bg-subtle: #f1f5f9;
+      --jelly-bg-muted: #e2e8f0;
+      
+      --jelly-text-default: #0f172a;
+      --jelly-text-muted: #64748b;
+      --jelly-text-subtle: #94a3b8;
+      
+      --jelly-border-default: #e2e8f0;
+      --jelly-border-subtle: #cbd5e1;
+      
+      --jelly-accent-default: #3b82f6;
+      --jelly-accent-subtle: #eff6ff;
+      --jelly-accent-border: #bfdbfe;
+      --jelly-accent-text: #1d4ed8;
+      
+      --jelly-code-bg: #f8fafc;
+      --jelly-code-border: #e2e8f0;
+      --jelly-code-text: #0f172a;
+      
+      --jelly-mark-bg: #fef08a;
+      --jelly-mark-text: #854d0e;
+      
+      --jelly-radius-xs: 4px;
+      --jelly-radius-sm: 8px;
+      --jelly-radius-md: 12px;
+      --jelly-radius-lg: 18px;
+      --jelly-radius-pill: 9999px;
+      
+      --jelly-shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --jelly-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      --jelly-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+    }
+
+    /* 다크 토큰은 화면 전용이다 — 인쇄에서는 :root 의 라이트 값이 그대로 이겨서,
+       다크로 보던 문서를 인쇄해도 흰 종이에 흰 글씨가 나오지 않는다. 값을 복사해
+       @media print 에 다시 적지 않는 이유이기도 하다(사본은 갈라진다). */
+    @media screen {
+    [data-theme="dark"] {
+      --jelly-bg-page: #0b0f19;
+      --jelly-bg-card: #151d2f;
+      --jelly-bg-subtle: #1e293b;
+      --jelly-bg-muted: #334155;
+      
+      --jelly-text-default: #f8fafc;
+      --jelly-text-muted: #94a3b8;
+      --jelly-text-subtle: #64748b;
+      
+      --jelly-border-default: #243048;
+      --jelly-border-subtle: #334155;
+      
+      --jelly-accent-default: #60a5fa;
+      --jelly-accent-subtle: #172554;
+      --jelly-accent-border: #1e3a8a;
+      --jelly-accent-text: #93c5fd;
+      
+      --jelly-code-bg: #0f172a;
+      --jelly-code-border: #243048;
+      --jelly-code-text: #f1f5f9;
+      
+      --jelly-mark-bg: #854d0e;
+      --jelly-mark-text: #fef08a;
+      
+      --jelly-shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --jelly-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+      --jelly-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--jelly-bg-page);
+      color: var(--jelly-text-default);
+      font-family: "Pretendard Local", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", Roboto, "Noto Sans KR", sans-serif;
+      font-size: 14px;
+      line-height: 1.72;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 메인 Jelly 카드 컨테이너 */
+    .jelly-container {
+      max-width: 860px;
+      width: 100%;
+      background: var(--jelly-bg-card);
+      border: 1px solid var(--jelly-border-default);
+      border-radius: var(--jelly-radius-lg);
+      box-shadow: var(--jelly-shadow-card);
+      padding: 44px 40px;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 14px 8px; }
+      .jelly-container { padding: 20px 16px; border-radius: var(--jelly-radius-md); }
+    }
+
+    /* 문서 헤더 & 메타 */
+    header.doc-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--jelly-border-default);
+    }
+
+    .doc-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1.doc-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.3;
+      color: var(--jelly-text-default);
+      letter-spacing: -0.025em;
+      word-break: break-word;
+    }
+
+    .doc-meta {
+      font-size: 0.8rem;
+      color: var(--jelly-text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* 생성기 판 표기 — 읽는 데 방해되지 않게 흐리게 두되, 눈으로도 찾을 수 있어야 한다.
+       기계는 <meta name="generator"> 를 보고 사람은 이 줄을 본다. */
+    .doc-meta .doc-generator {
+      font-size: 0.72rem;
+      color: var(--jelly-text-subtle);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .doc-chips-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 0.8rem;
+    }
+
+    /* Jelly 태그/메타 칩 */
+    .jelly-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: var(--jelly-radius-pill);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      border: 1px solid var(--jelly-border-default);
+      background: var(--jelly-bg-subtle);
+      color: var(--jelly-text-muted);
+    }
+
+    .jelly-chip-type { background: var(--jelly-accent-subtle); color: var(--jelly-accent-text); border-color: var(--jelly-accent-border); }
+    .jelly-chip-status { background: rgba(16, 185, 129, 0.1); color: #059669; border-color: rgba(16, 185, 129, 0.25); }
+    .jelly-chip-confidence { background: rgba(245, 158, 11, 0.1); color: #d97706; border-color: rgba(245, 158, 11, 0.25); }
+    .jelly-chip-topic, .jelly-chip-tag { background: var(--jelly-bg-subtle); color: var(--jelly-text-muted); }
+
+    /* Jelly 테마 전환 아이콘 버튼 */
+    /* 아래 둘(테마 토글·코드 복사)은 JS 가 있어야만 뜻이 있는 컨트롤이라 기본이 숨김이고,
+       스크립트가 실제로 실행됐을 때만 html.js 로 드러난다.
+       (이 주석 안에서는 백틱을 쓰지 않는다 — 이 CSS 전체가 템플릿 문자열이라 거기서 끊긴다.)
+
+       iOS 파일 앱의 미리보기 같은 내장 웹뷰는 JavaScript 를 아예 돌리지 않는다. 거기서는
+       이 버튼들이 «눌러도 아무 일 없는 장식»이 되는데, 없는 것보다 나쁘다 — 사용자는 기능이
+       고장 났다고 읽는다. 플랫폼을 목록으로 짐작하지 않고(오늘 그 방식으로 세 번 틀렸다)
+       «JS 가 도는가»라는 실제 조건을 본다. 이미지·다이어그램·구문 강조는 정적이라 그대로 나온다. */
+    .jelly-theme-toggle {
+      background: var(--jelly-bg-subtle);
+      color: var(--jelly-text-default);
+      border: 1px solid var(--jelly-border-default);
+      width: 34px;
+      height: 34px;
+      border-radius: var(--jelly-radius-md);
+      font-size: 1rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      user-select: none;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .jelly-theme-toggle:hover {
+      background: var(--jelly-bg-muted);
+      transform: scale(1.06);
+    }
+
+    /* 본문 마크다운 타이포그래피 */
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, 
+    .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+      margin-top: 1.8rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--jelly-text-default);
+      letter-spacing: -0.02em;
+      word-break: break-word;
+    }
+
+    .markdown-body h1 { font-size: 1.48rem; border-bottom: 1px solid var(--jelly-border-default); padding-bottom: 0.3rem; }
+    .markdown-body h2 { font-size: 1.25rem; border-bottom: 1px solid var(--jelly-border-default); padding-bottom: 0.3rem; }
+    .markdown-body h3 { font-size: 1.08rem; }
+    .markdown-body h4 { font-size: 0.98rem; }
+    .markdown-body h5 { font-size: 0.88rem; }
+    .markdown-body h6 { font-size: 0.80rem; color: var(--jelly-text-muted); }
+
+    .markdown-body p {
+      margin-bottom: 1.05rem;
+    }
+
+    /* 링크 스타일 */
+    .markdown-body a {
+      color: var(--jelly-accent-default);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .markdown-body a:hover {
+      text-decoration: underline;
+    }
+
+    /* 옵시디언 위키링크 ([[노트명]]) -> Jelly 알약 칩 스타일 */
+    .markdown-body a.obsidian-internal-link,
+    .markdown-body a.internal-link {
+      display: inline-flex;
+      align-items: center;
+      background: var(--jelly-accent-subtle);
+      color: var(--jelly-accent-text);
+      padding: 1px 8px;
+      margin: 0 2px;
+      border-radius: var(--jelly-radius-sm);
+      font-size: 0.9em;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--jelly-accent-border);
+      vertical-align: baseline;
+      transition: all 0.15s ease;
+    }
+
+    .markdown-body a.obsidian-internal-link:hover,
+    .markdown-body a.internal-link:hover {
+      background: var(--jelly-accent-default);
+      color: #ffffff;
+      border-color: var(--jelly-accent-default);
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: var(--jelly-shadow-sm);
+    }
+
+    /* 형광펜 (Highlight: ==text==) */
+    .markdown-body mark {
+      background-color: var(--jelly-mark-bg);
+      color: var(--jelly-mark-text);
+      padding: 2px 5px;
+      border-radius: var(--jelly-radius-xs);
+      font-weight: 500;
+    }
+
+    /* 목록 */
+    .markdown-body ul, .markdown-body ol {
+      margin-bottom: 1.15rem;
+      padding-left: 1.6rem;
+    }
+
+    .markdown-body li {
+      margin-bottom: 0.35rem;
+    }
+
+    .markdown-body li > ul, .markdown-body li > ol {
+      margin-top: 0.35rem;
+      margin-bottom: 0.35rem;
+      padding-left: 1.6rem;
+    }
+
+    /* 체크박스 / 태스크 목록 */
+    .markdown-body ul.contains-task-list {
+      padding-left: 0.2rem;
+      list-style: none;
+    }
+
+    .markdown-body ul.contains-task-list ul.contains-task-list,
+    .markdown-body ul.contains-task-list ul,
+    .markdown-body li.task-list-item ul {
+      padding-left: 1.75rem;
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .markdown-body .task-list-item,
+    .markdown-body li:has(input[type="checkbox"]) {
+      list-style-type: none;
+      margin-left: 0;
+      margin-bottom: 0.4rem;
+      line-height: 1.6;
+    }
+
+    .markdown-body input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      min-width: 14px;
+      min-height: 14px;
+      border: 1.5px solid var(--jelly-border-subtle);
+      border-radius: 4px;
+      background: var(--jelly-bg-card);
+      cursor: pointer;
+      display: inline-grid;
+      place-content: center;
+      vertical-align: middle;
+      margin: 0 6px 0 0 !important;
+      position: relative;
+      top: -1px;
+      transition: all 0.15s ease;
+    }
+
+    .markdown-body input[type="checkbox"]:checked {
+      background: var(--jelly-accent-default);
+      border-color: var(--jelly-accent-default);
+    }
+
+    .markdown-body input[type="checkbox"]:checked::before {
+      content: "";
+      width: 7px;
+      height: 3.5px;
+      border-left: 1.8px solid #fff;
+      border-bottom: 1.8px solid #fff;
+      transform: rotate(-45deg) translate(0.5px, -0.5px);
+    }
+
+    /* Jelly 인용구 */
+    .markdown-body blockquote {
+      margin: 1.3rem 0;
+      padding: 0.85rem 1.3rem;
+      border-left: 4px solid var(--jelly-accent-default);
+      background-color: var(--jelly-bg-subtle);
+      border-radius: 0 var(--jelly-radius-sm) var(--jelly-radius-sm) 0;
+      color: var(--jelly-text-muted);
+      font-style: normal;
+    }
+
+    .markdown-body blockquote p {
+      margin-bottom: 0.55rem;
+    }
+
+    .markdown-body blockquote > :last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .markdown-body blockquote > :first-child {
+      margin-top: 0 !important;
+    }
+
+    .markdown-body blockquote blockquote {
+      margin: 0.75rem 0;
+      padding: 0.6rem 1rem;
+    }
+
+    /* Jelly 코드 & 코드 블록 */
+    .markdown-body code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 0.88em;
+      background-color: var(--jelly-code-bg);
+      color: var(--jelly-code-text);
+      padding: 0.2em 0.45em;
+      border-radius: var(--jelly-radius-sm);
+      border: 1px solid var(--jelly-code-border);
+    }
+
+    /* 넘칠 수 있는 것 셋 — **페이지가 아니라 자기 상자가 감당한다.**
+       내보낸 문서는 어느 폭에서 열릴지 알 수 없는데, 넘치는 것을 페이지가 감당하면 본문 전체가
+       가로로 밀려 글줄까지 잘린다. 셋을 한자리에 묶어 두는 것은 **하나가 빠지면 그 하나에서
+       페이지가 밀리기 때문**이다(실제로 표만 빠져 있었다). 인쇄에서 푸는 예외도 같은 셋이다. */
+    .markdown-body pre,
+    .markdown-body .jelly-table-scroll,
+    .markdown-body .mermaid-rendered {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .markdown-body pre {
+      position: relative;
+      background-color: var(--jelly-code-bg);
+      padding: 1.2rem 1.3rem;
+      border-radius: var(--jelly-radius-md);
+      margin: 1.4rem 0;
+      border: 1px solid var(--jelly-code-border);
+      box-shadow: var(--jelly-shadow-sm);
+    }
+
+    .markdown-body pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* 코드 블록 복사 버튼 */
+    html.js .jelly-theme-toggle { display: inline-flex; }
+    html.js .markdown-body .copy-code-button { display: inline-flex; }
+
+    .markdown-body .copy-code-button {
+      display: none;
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      background: var(--jelly-bg-card);
+      color: var(--jelly-text-muted);
+      border: 1px solid var(--jelly-border-default);
+      border-radius: var(--jelly-radius-sm);
+      padding: 3px 8px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.6;
+      transition: all 0.15s ease;
+      z-index: 10;
+    }
+
+    .markdown-body pre:hover .copy-code-button {
+      opacity: 1;
+    }
+
+    .markdown-body .copy-code-button:hover {
+      background: var(--jelly-accent-default);
+      color: #fff;
+      border-color: var(--jelly-accent-default);
+      transform: translateY(-1px);
+    }
+
+    /* 구문 강조 (Syntax Highlighting Tokens) */
+    .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #64748b; font-style: italic; }
+    .token.punctuation { color: #94a3b8; }
+    .token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol { color: #d97706; }
+    .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #059669; }
+    .token.operator, .token.entity, .token.url { color: #0284c7; }
+    .token.atrule, .token.attr-value, .token.keyword { color: #7c3aed; font-weight: 600; }
+    .token.function, .token.class-name { color: #2563eb; }
+    .token.regex, .token.important, .token.variable { color: #ea580c; }
+
+    @media screen {
+    [data-theme="dark"] .token.comment, [data-theme="dark"] .token.prolog, [data-theme="dark"] .token.doctype, [data-theme="dark"] .token.cdata { color: #64748b; }
+    [data-theme="dark"] .token.punctuation { color: #64748b; }
+    [data-theme="dark"] .token.property, [data-theme="dark"] .token.tag, [data-theme="dark"] .token.boolean, [data-theme="dark"] .token.number, [data-theme="dark"] .token.constant, [data-theme="dark"] .token.symbol { color: #fbbf24; }
+    [data-theme="dark"] .token.selector, [data-theme="dark"] .token.attr-name, [data-theme="dark"] .token.string, [data-theme="dark"] .token.char, [data-theme="dark"] .token.builtin, [data-theme="dark"] .token.inserted { color: #34d399; }
+    [data-theme="dark"] .token.operator, [data-theme="dark"] .token.entity, [data-theme="dark"] .token.url { color: #38bdf8; }
+    [data-theme="dark"] .token.atrule, [data-theme="dark"] .token.attr-value, [data-theme="dark"] .token.keyword { color: #c084fc; }
+    [data-theme="dark"] .token.function, [data-theme="dark"] .token.class-name { color: #60a5fa; }
+    [data-theme="dark"] .token.regex, [data-theme="dark"] .token.important, [data-theme="dark"] .token.variable { color: #fb923c; }
+    }
+
+    /* Jelly 테이블 — **상자와 표를 나눈다.**
+       열이 많은 표는 내용이 요구하는 만큼 넓어지는데, 그것을 페이지가 감당하면 본문 전체가
+       가로로 밀려 글줄까지 잘려 나간다. 그래서 스크롤은 표를 감싼 상자가 맡고 테두리·모서리·
+       그림자도 그 상자가 갖는다 — 표에 걸면 스크롤할 때 테두리가 같이 흘러가 상자가 깨진다.
+       mermaid 도 같은 구조다(.mermaid-rendered). */
+    .markdown-body .jelly-table-scroll {
+      margin: 1.5rem 0;
+      border-radius: var(--jelly-radius-md);
+      border: 1px solid var(--jelly-border-default);
+      background: var(--jelly-bg-card);
+      box-shadow: var(--jelly-shadow-sm);
+    }
+
+    .markdown-body table {
+      /* 좁은 표는 지금까지처럼 폭을 채우고, 넓은 표는 필요한 만큼 넘어간다(상자가 스크롤한다). */
+      min-width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 0;
+      font-size: 0.88rem;
+      background: var(--jelly-bg-card);
+    }
+
+    .markdown-body th {
+      background-color: var(--jelly-bg-subtle);
+      color: var(--jelly-text-default);
+      font-weight: 700;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--jelly-border-default);
+      border-right: 1px solid var(--jelly-border-default);
+      text-align: center !important;
+      vertical-align: middle;
+      letter-spacing: -0.01em;
+    }
+
+    .markdown-body th:last-child {
+      border-right: none;
+    }
+
+    .markdown-body td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--jelly-border-default);
+      border-right: 1px solid var(--jelly-border-default);
+      color: var(--jelly-text-default);
+      vertical-align: middle;
+    }
+
+    .markdown-body td:last-child {
+      border-right: none;
+    }
+
+    .markdown-body tr:last-child td {
+      border-bottom: none;
+    }
+
+    .markdown-body tr:nth-child(even) td {
+      background-color: rgba(125, 125, 125, 0.025);
+    }
+
+    .markdown-body tr:hover td {
+      background-color: var(--jelly-bg-subtle);
+    }
+
+    /* 이미지 */
+    .markdown-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--jelly-radius-md);
+      margin: 1.3rem auto;
+      display: block;
+      border: 1px solid var(--jelly-border-default);
+      box-shadow: var(--jelly-shadow-sm);
+    }
+
+    /* 옵시디언 Callout (Jelly Card 스펙) */
+    .markdown-body .callout {
+      margin: 1.3rem 0;
+      padding: 1rem 1.25rem;
+      border-left: 4px solid var(--jelly-accent-default);
+      background-color: var(--jelly-bg-subtle);
+      border-radius: var(--jelly-radius-md);
+      border-top: 1px solid var(--jelly-border-default);
+      border-right: 1px solid var(--jelly-border-default);
+      border-bottom: 1px solid var(--jelly-border-default);
+      box-shadow: var(--jelly-shadow-sm);
+    }
+
+    .markdown-body .callout-title {
+      font-weight: 700;
+      display: flex;
+      /* center 로 두면 제목이 여러 줄로 접힐 때(좁은 폰 화면) 아이콘이 제목 «블록» 기준으로
+         가운데에 내려앉는다. 아이콘이 붙어야 하는 곳은 첫 줄이므로 위로 정렬한다. */
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 0.45rem;
+      color: var(--jelly-text-default);
+      font-size: 0.94rem;
+      line-height: 1.4;
+    }
+
+    .markdown-body .callout-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 0.95em;
+      /* 상자 높이를 첫 줄 상자와 같게(= .callout-title 의 line-height) 잡고 그 안에서 가운데
+         정렬한다. margin-top 에 보정값을 박는 것보다 낫다 — line-height 를 고쳐도 따라온다. */
+      height: 1.4em;
+      max-width: 14px;
+      color: inherit;
+    }
+
+    .markdown-body .callout-icon svg,
+    .markdown-body .svg-icon {
+      width: 0.95em;
+      height: 0.95em;
+      max-width: 14px;
+      max-height: 14px;
+      display: block;
+      stroke-width: 2;
+    }
+
+    .markdown-body .callout-title-inner {
+      font-weight: 700;
+      display: inline;
+    }
+
+    .markdown-body .callout-content {
+      font-size: 0.90rem;
+      color: var(--jelly-text-default);
+    }
+
+    .markdown-body .callout-content > :last-child {
+      margin-bottom: 0;
+    }
+
+    /* Callout 유형별 Jelly 테마 */
+    .markdown-body .callout[data-callout="info"], .markdown-body .callout[data-callout="todo"] {
+      border-left-color: #3b82f6;
+      background-color: rgba(59, 130, 246, 0.05);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+    .markdown-body .callout[data-callout="warning"], .markdown-body .callout[data-callout="warn"], .markdown-body .callout[data-callout="caution"] {
+      border-left-color: #f59e0b;
+      background-color: rgba(245, 158, 11, 0.06);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+    .markdown-body .callout[data-callout="danger"], .markdown-body .callout[data-callout="error"], .markdown-body .callout[data-callout="failure"] {
+      border-left-color: #ef4444;
+      background-color: rgba(239, 68, 68, 0.06);
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+    .markdown-body .callout[data-callout="success"], .markdown-body .callout[data-callout="check"], .markdown-body .callout[data-callout="done"] {
+      border-left-color: #10b981;
+      background-color: rgba(16, 185, 129, 0.06);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+    .markdown-body .callout[data-callout="tip"], .markdown-body .callout[data-callout="hint"], .markdown-body .callout[data-callout="important"] {
+      border-left-color: #06b6d4;
+      background-color: rgba(6, 182, 212, 0.06);
+      border-color: rgba(6, 182, 212, 0.2);
+    }
+    .markdown-body .callout[data-callout="quote"], .markdown-body .callout[data-callout="cite"] {
+      border-left-color: #8b5cf6;
+      background-color: rgba(139, 92, 246, 0.06);
+      border-color: rgba(139, 92, 246, 0.2);
+    }
+    .markdown-body .callout[data-callout="question"], .markdown-body .callout[data-callout="help"], .markdown-body .callout[data-callout="faq"] {
+      border-left-color: #ec4899;
+      background-color: rgba(236, 72, 153, 0.06);
+      border-color: rgba(236, 72, 153, 0.2);
+    }
+    .markdown-body .callout[data-callout="bug"] {
+      border-left-color: #f43f5e;
+      background-color: rgba(244, 63, 94, 0.06);
+      border-color: rgba(244, 63, 94, 0.2);
+    }
+    .markdown-body .callout[data-callout="example"] {
+      border-left-color: #6366f1;
+      background-color: rgba(99, 102, 241, 0.06);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    /* 머메이드(Mermaid) 다이어그램 카드 */
+    .markdown-body .mermaid,
+    .markdown-body .block-language-mermaid,
+    .markdown-body .mermaid-rendered {
+      display: flex;
+      justify-content: center;
+      margin: 1.6rem 0;
+      background-color: var(--jelly-bg-subtle);
+      padding: 1.6rem;
+      border-radius: var(--jelly-radius-md);
+      border: 1px solid var(--jelly-border-default);
+      box-shadow: var(--jelly-shadow-sm);
+    }
+
+    .markdown-body .mermaid svg,
+    .markdown-body .block-language-mermaid svg,
+    .markdown-body .mermaid-rendered svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* 구분선 */
+    .markdown-body hr {
+      border: none;
+      height: 1px;
+      background-color: var(--jelly-border-default);
+      margin: 2.2rem 0;
+    }
+
+    /* 키캡 (<kbd>) */
+    .markdown-body kbd {
+      background: var(--jelly-bg-subtle);
+      border: 1px solid var(--jelly-border-subtle);
+      border-bottom-width: 2px;
+      border-radius: var(--jelly-radius-xs);
+      padding: 2px 6px;
+      font-size: 0.82em;
+      font-family: inherit;
+    }
+
+    /* 인쇄 최적화 */
+    @media print {
+      body { background: #fff !important; padding: 0; }
+      .jelly-container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .jelly-theme-toggle, .copy-code-button { display: none !important; }
+      /* 종이는 스크롤이 없다 — 스크롤 상자를 그대로 두면 넘치는 열이 **잘린 채 인쇄된다.**
+         넘치게 두면 적어도 프린터의 축소·분할이 그것을 볼 수 있다. */
+      .markdown-body .jelly-table-scroll,
+      .markdown-body .mermaid-rendered,
+      .markdown-body pre { overflow: visible !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="jelly-container">
+    <header class="doc-header">
+      <div class="doc-header-top">
+        <h1 class="doc-title">Laborator 03</h1>
+        <button class="jelly-theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme" title="Switch to dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+      </div>
+      <div class="doc-meta">
+        <span>Exported: 10/21/2026, 8:04:05 AM</span>
+        <span class="doc-generator">single-html-export v0.10.0</span>
+      </div>
+      
+    </header>
+    <main class="markdown-body">
+      
+<h2 data-heading="Expunerea funcționalităților prin servicii standardizate: serverul MCP, scheme de date, mesaje și transport" dir="auto">Expunerea funcționalităților prin servicii standardizate: serverul MCP, scheme de date, mesaje și transport</h2>
+<hr>
+<h2 data-heading="1. Concepte" dir="auto">1. Concepte</h2>
+<h3 data-heading="1.1. Serviciul și adaptorul" dir="auto">1.1. Serviciul și adaptorul</h3>
+<p dir="auto">Până acum, datele și regulile clădirii inteligente erau plasate în același fișier cu instrumentele MCP. În practică, funcționalitatea există deja (o bibliotecă, o bază de date, un API intern), iar serverul MCP este un <strong>adaptor</strong>: o traduce într-o formă standard pe care orice client MCP o poate descoperi și folosi.</p>
+<div class="mermaid"><svg id="mdbd0d1cb6a9f6cd3" width="758.203125" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" height="278" viewBox="0 0 758.203125 278" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#mdbd0d1cb6a9f6cd3{font-family:var(--font-mermaid);font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mdbd0d1cb6a9f6cd3 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mdbd0d1cb6a9f6cd3 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mdbd0d1cb6a9f6cd3 .error-icon{fill:#552222;}#mdbd0d1cb6a9f6cd3 .error-text{fill:#552222;stroke:#552222;}#mdbd0d1cb6a9f6cd3 .edge-thickness-normal{stroke-width:1px;}#mdbd0d1cb6a9f6cd3 .edge-thickness-thick{stroke-width:3.5px;}#mdbd0d1cb6a9f6cd3 .edge-pattern-solid{stroke-dasharray:0;}#mdbd0d1cb6a9f6cd3 .edge-thickness-invisible{stroke-width:0;fill:none;}#mdbd0d1cb6a9f6cd3 .edge-pattern-dashed{stroke-dasharray:3;}#mdbd0d1cb6a9f6cd3 .edge-pattern-dotted{stroke-dasharray:2;}#mdbd0d1cb6a9f6cd3 .marker{fill:#333333;stroke:#333333;}#mdbd0d1cb6a9f6cd3 .marker.cross{stroke:#333333;}#mdbd0d1cb6a9f6cd3 svg{font-family:var(--font-mermaid);font-size:16px;}#mdbd0d1cb6a9f6cd3 p{margin:0;}#mdbd0d1cb6a9f6cd3 .label{font-family:var(--font-mermaid);color:#333;}#mdbd0d1cb6a9f6cd3 .cluster-label text{fill:#333;}#mdbd0d1cb6a9f6cd3 .cluster-label span{color:#333;}#mdbd0d1cb6a9f6cd3 .cluster-label span p{background-color:transparent;}#mdbd0d1cb6a9f6cd3 .label text,#mdbd0d1cb6a9f6cd3 span{fill:#333;color:#333;}#mdbd0d1cb6a9f6cd3 .node rect,#mdbd0d1cb6a9f6cd3 .node circle,#mdbd0d1cb6a9f6cd3 .node ellipse,#mdbd0d1cb6a9f6cd3 .node polygon,#mdbd0d1cb6a9f6cd3 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mdbd0d1cb6a9f6cd3 .rough-node .label text,#mdbd0d1cb6a9f6cd3 .node .label text,#mdbd0d1cb6a9f6cd3 .image-shape .label,#mdbd0d1cb6a9f6cd3 .icon-shape .label{text-anchor:middle;}#mdbd0d1cb6a9f6cd3 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mdbd0d1cb6a9f6cd3 .rough-node .label,#mdbd0d1cb6a9f6cd3 .node .label,#mdbd0d1cb6a9f6cd3 .image-shape .label,#mdbd0d1cb6a9f6cd3 .icon-shape .label{text-align:center;}#mdbd0d1cb6a9f6cd3 .node.clickable{cursor:pointer;}#mdbd0d1cb6a9f6cd3 .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#mdbd0d1cb6a9f6cd3 .arrowheadPath{fill:#333333;}#mdbd0d1cb6a9f6cd3 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mdbd0d1cb6a9f6cd3 .flowchart-link{stroke:#333333;fill:none;}#mdbd0d1cb6a9f6cd3 .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mdbd0d1cb6a9f6cd3 .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mdbd0d1cb6a9f6cd3 .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mdbd0d1cb6a9f6cd3 .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#mdbd0d1cb6a9f6cd3 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mdbd0d1cb6a9f6cd3 .cluster text{fill:#333;}#mdbd0d1cb6a9f6cd3 .cluster span{color:#333;}#mdbd0d1cb6a9f6cd3 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:var(--font-mermaid);font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mdbd0d1cb6a9f6cd3 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mdbd0d1cb6a9f6cd3 rect.text{fill:none;stroke-width:0;}#mdbd0d1cb6a9f6cd3 .icon-shape,#mdbd0d1cb6a9f6cd3 .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#mdbd0d1cb6a9f6cd3 .icon-shape p,#mdbd0d1cb6a9f6cd3 .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#mdbd0d1cb6a9f6cd3 .icon-shape .label rect,#mdbd0d1cb6a9f6cd3 .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mdbd0d1cb6a9f6cd3 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mdbd0d1cb6a9f6cd3 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mdbd0d1cb6a9f6cd3 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M164.906,35L177.056,35C189.206,35,213.505,35,238.125,45.406C262.745,55.812,287.684,76.625,300.154,87.031L312.624,97.437" id="L_C1_S_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C1_S_0" data-points="W3sieCI6MTY0LjkwNjI1LCJ5IjozNX0seyJ4IjoyMzcuODA0Njg3NSwieSI6MzV9LHsieCI6MzE1LjY5NTMxMjUsInkiOjEwMH1d" marker-end="url(#mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-pointEnd)"></path><path d="M196.188,139L203.124,139C210.06,139,223.932,139,237.138,139C250.344,139,262.883,139,269.152,139L275.422,139" id="L_C2_S_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C2_S_0" data-points="W3sieCI6MTk2LjE4NzUsInkiOjEzOX0seyJ4IjoyMzcuODA0Njg3NSwieSI6MTM5fSx7IngiOjI3OS40MjE4NzUsInkiOjEzOX1d" marker-end="url(#mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-pointEnd)"></path><path d="M177.352,243L187.427,243C197.503,243,217.654,243,240.199,232.594C262.745,222.188,287.684,201.375,300.154,190.969L312.624,180.563" id="L_C3_S_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C3_S_0" data-points="W3sieCI6MTc3LjM1MTU2MjUsInkiOjI0M30seyJ4IjoyMzcuODA0Njg3NSwieSI6MjQzfSx7IngiOjMxNS42OTUzMTI1LCJ5IjoxNzh9XQ==" marker-end="url(#mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-pointEnd)"></path><path d="M445.438,139L458.128,139C470.818,139,496.198,139,520.911,139C545.625,139,569.672,139,581.695,139L593.719,139" id="L_S_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_S_B_0" data-points="W3sieCI6NDQ1LjQzNzUsInkiOjEzOX0seyJ4Ijo1MjEuNTc4MTI1LCJ5IjoxMzl9LHsieCI6NTk3LjcxODc1LCJ5IjoxMzl9XQ==" marker-end="url(#mdbd0d1cb6a9f6cd3-mdbd0d1cb6a9f6cd3_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(237.8046875, 35)"><g class="label" data-id="L_C1_S_0" transform="translate(-16.6171875, -12)"><foreignObject width="33.234375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>MCP</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(237.8046875, 139)"><g class="label" data-id="L_C2_S_0" transform="translate(-16.6171875, -12)"><foreignObject width="33.234375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>MCP</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(237.8046875, 243)"><g class="label" data-id="L_C3_S_0" transform="translate(-16.6171875, -12)"><foreignObject width="33.234375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>MCP</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(521.578125, 139)"><g class="label" data-id="L_S_B_0" transform="translate(-51.140625, -12)"><foreignObject width="102.28125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>apeluri Python</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="flowchart-C1-0" transform="translate(102.09375, 35)"><rect class="basic label-container" style="" x="-62.8125" y="-27" width="125.625" height="54"></rect><g class="label" style="" transform="translate(-32.8125, -12)"><rect></rect><foreignObject width="65.625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Inspector</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-S-1" transform="translate(362.4296875, 139)"><rect class="basic label-container" style="" x="-83.0078125" y="-39" width="166.015625" height="78"></rect><g class="label" style="" transform="translate(-53.0078125, -24)"><rect></rect><foreignObject width="106.015625" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>server.py<br>adaptorul MCP</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-C2-2" transform="translate(102.09375, 139)"><rect class="basic label-container" style="" x="-94.09375" y="-27" width="188.1875" height="54"></rect><g class="label" style="" transform="translate(-64.09375, -12)"><rect></rect><foreignObject width="128.1875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>Agentul din Lab. 2</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-C3-4" transform="translate(102.09375, 243)"><rect class="basic label-container" style="" x="-75.2578125" y="-27" width="150.515625" height="54"></rect><g class="label" style="" transform="translate(-45.2578125, -12)"><rect></rect><foreignObject width="90.515625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>raw_client.py</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-B-7" transform="translate(673.9609375, 139)"><rect class="basic label-container" style="" x="-76.2421875" y="-39" width="152.484375" height="78"></rect><g class="label" style="" transform="translate(-46.2421875, -24)"><rect></rect><foreignObject width="92.484375" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>building.py<br>logica clădirii</p></span></div></foreignObject></g></g></g></g></g></svg></div>
+<p dir="auto"><code>building.py</code> nu importă nimic din MCP și poate fi testat singur.<br>
+<code>server.py</code> face trei lucruri: declară <strong>schemele</strong>, traduce <strong>erorile</strong> și alege <strong>transportul</strong>.</p>
+<h3 data-heading="1.2. Mesajele" dir="auto">1.2. Mesajele</h3>
+<p dir="auto">MCP folosește <strong>JSON-RPC 2.0</strong>. Există trei feluri de mesaje:</p>
+<div class="jelly-table-scroll"><table>
+<thead>
+<tr>
+<th>Mesaj</th>
+<th>Are <code>id</code>?</th>
+<th>Conține</th>
+<th>Exemplu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>cerere</strong></td>
+<td>da</td>
+<td><code>method</code>, <code>params</code></td>
+<td><code>tools/call</code></td>
+</tr>
+<tr>
+<td><strong>răspuns</strong></td>
+<td>același <code>id</code> ca cererea (lipsește doar dacă cererea nu a putut fi citită)</td>
+<td><strong>fie</strong> <code>result</code>, <strong>fie</strong> <code>error</code> (cu <code>code</code> și <code>message</code>)</td>
+<td>rezultatul apelului</td>
+</tr>
+<tr>
+<td><strong>notificare</strong></td>
+<td>nu</td>
+<td><code>method</code>, <code>params</code>; nu primește răspuns</td>
+<td><code>notifications/progress</code></td>
+</tr>
+</tbody>
+</table></div>
+<p dir="auto">Versiunea curentă a specificației <strong>2026</strong>, folosește protocolul <strong>fără stare</strong>:</p>
+<ul>
+<li dir="auto">nu mai există negocierea inițială <code>initialize</code> și nici sesiunea de protocol;</li>
+<li dir="auto"><strong>fiecare cerere</strong> își poartă singură, în <code>params._meta</code>, versiunea de protocol, capabilitățile clientului și (recomandat) identitatea clientului;</li>
+<li dir="auto">serverul <strong>trebuie</strong> să răspundă la <code>server/discover</code>, prin care spune ce versiuni și capabilități are; clientul îl poate apela înaintea oricărei alte cereri;</li>
+<li dir="auto">fiecare rezultat are câmpul <code>resultType</code> (<code>"complete"</code> pentru un rezultat obișnuit).</li>
+</ul>
+<blockquote dir="auto">
+<p><strong>Materialele mai vechi</strong> (inclusiv multe tutoriale) descriu negocierea <code>initialize</code> / <code>notifications/initialized</code> și antetul <code>Mcp-Session-Id</code>. Ele sunt valabile pentru versiunile până la pre-2026. Serverul din laborator acceptă ambele variante; diferența se poate vedea în Inspector.</p>
+</blockquote>
+<h3 data-heading="1.3. Schemele și erorile" dir="auto">1.3. Schemele și erorile</h3>
+<p dir="auto">Un instrument este descris prin:</p>
+<ul>
+<li dir="auto"><strong><code>inputSchema</code></strong>: o schemă JSON a argumentelor (tipuri, valori permise, limite).</li>
+<li dir="auto"><strong><code>outputSchema</code></strong> (opțional): o schemă JSON a rezultatului. Dacă există, serverul <strong>trebuie</strong> să întoarcă în <code>structuredContent</code> date conforme cu ea, iar clientul <strong>ar trebui</strong> să le valideze. Pentru compatibilitate, serverul <strong>ar trebui</strong> să pună același JSON și ca text în <code>content</code>; FastMCP o face automat (<a data-tooltip-position="top" aria-label="https://modelcontextprotocol.io/specification/2026-07-28/server/tools" rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools" target="_blank">MCP - Tools</a>).</li>
+</ul>
+<p dir="auto">Specificația deosebește două feluri de erori:</p>
+<div class="jelly-table-scroll"><table>
+<thead>
+<tr>
+<th>Fel</th>
+<th>Unde apare</th>
+<th>Exemple</th>
+<th>Cine o poate corecta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>eroare de protocol</strong></td>
+<td>câmpul <code>error</code> al răspunsului JSON-RPC</td>
+<td>metodă inexistentă, cerere malformată, versiune nesuportată</td>
+<td>programatorul clientului</td>
+</tr>
+<tr>
+<td><strong>eroare de execuție</strong></td>
+<td><code>result</code>, cu <code>isError: true</code></td>
+<td>argument în afara limitelor, regulă de domeniu încălcată</td>
+<td>adesea chiar modelul, la următorul apel</td>
+</tr>
+</tbody>
+</table></div>
+<h3 data-heading="1.4. Transportul de date" dir="auto">1.4. Transportul de date</h3>
+<div class="jelly-table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>stdio</strong></th>
+<th><strong>Streamable HTTP</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cine pornește serverul</td>
+<td>clientul, ca proces copil</td>
+<td>serverul rulează independent</td>
+</tr>
+<tr>
+<td>Câți clienți</td>
+<td>unul (cel care l-a pornit)</td>
+<td>oricâți</td>
+</tr>
+<tr>
+<td>Pe unde circulă mesajele</td>
+<td>intrarea și ieșirea standard</td>
+<td>câte un <code>POST</code> la o singură adresă, de exemplu <code>/mcp</code></td>
+</tr>
+<tr>
+<td>Răspunsul</td>
+<td>o linie JSON</td>
+<td><code>application/json</code> sau un flux SSE pentru acea cerere</td>
+</tr>
+<tr>
+<td>Folosit pentru</td>
+<td>unelte locale</td>
+<td>servicii partajate, servere la distanță</td>
+</tr>
+</tbody>
+</table></div>
+<p dir="auto">Pe HTTP, specificația cere (<a data-tooltip-position="top" aria-label="https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http" rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http" target="_blank">MCP - Streamable HTTP</a>):</p>
+<ul>
+<li dir="auto">Antetele <code>MCP-Protocol-Version</code>, <code>Mcp-Method</code> și, pentru <code>tools/call</code>, <code>resources/read</code> și <code>prompts/get</code>, <code>Mcp-Name</code>. Ele <strong>copiază</strong> valori din corpul mesajului, ca un echilibrator de încărcare (<em>load balancer</em>) sau un firewall să poată decide fără să citească JSON-ul. Serverul verifică dacă antetele corespund corpului;</li>
+<li dir="auto">Validarea antetului <code>Origin</code>, ca o pagină web deschisă în browser să nu poată apela un server local (atacul <em>DNS rebinding</em>);</li>
+<li dir="auto">Legarea doar la <code>127.0.0.1</code> când serverul rulează local.</li>
+</ul>
+<hr>
+<h2 data-heading="2. Pregătirea" dir="auto">2. Pregătirea</h2>
+<p dir="auto">Copiați folderul <code>lab3-si</code> primit lângămaterialele din laboratoarele anterioare. Mediul virtual folosește în plus <code>httpx</code> (un client HTTP pentru Python). Opțiunea <code>-U</code> actualizează FastMCP la cea mai recentă versiune 4.x (fișierul <code>requirements.txt</code> exclude versiunea 5 - este prea nouă).</p>
+<pre class="language-powershell"><code class="language-powershell is-loaded">cd lab3-<span class="token function">si</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span>\lab1-<span class="token function">si</span>\<span class="token punctuation">.</span>venv\Scripts\Activate<span class="token punctuation">.</span>ps1
+pip install <span class="token operator">-</span>U <span class="token operator">-</span>r requirements<span class="token punctuation">.</span>txt
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Pe Linux / macOS: <code>source ../lab1-si/.venv/bin/activate</code>.</p>
+<div class="jelly-table-scroll"><table>
+<thead>
+<tr>
+<th>Fișier</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>building.py</code></td>
+<td>logica clădirii: date, stare, reguli. Fără MCP</td>
+</tr>
+<tr>
+<td><code>server.py</code></td>
+<td>serverul MCP, versiunea 3: scheme, erori, transport</td>
+</tr>
+<tr>
+<td><code>client_demo.py</code></td>
+<td>doi clienți FastMCP conectați prin HTTP la același server</td>
+</tr>
+<tr>
+<td><code>raw_client.py</code></td>
+<td>client MCP fără SDK: construiește și trimite mesajele de mână</td>
+</tr>
+<tr>
+<td><code>requirements.txt</code></td>
+<td><code>fastmcp&gt;=4,&lt;5</code>, <code>openai&gt;=3</code>, <code>httpx</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 data-heading="3. Partea A: scheme de date și erori" dir="auto">3. Partea A: scheme de date și erori</h2>
+<h3 data-heading="3.1. Logica, fără MCP" dir="auto">3.1. Logica, fără MCP</h3>
+<p dir="auto">Rulați:</p>
+<pre class="language-powershell"><code class="language-powershell is-loaded">python building<span class="token punctuation">.</span>py
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Studiați <code>building.py</code>. Observați că o regulă încălcată (dispozitiv necunoscut, conflict, temperatură în afara limitelor) ridică o excepție de domeniu, <code>BuildingError</code>. Biblioteca nu știe cine o folosește.</p>
+<h3 data-heading="3.2. Ce s-a schimbat în server" dir="auto">3.2. Ce s-a schimbat în server</h3>
+<p dir="auto">Deschideți <code>server.py</code>. Observați diferențele față de versiunea laboratorului anterior.</p>
+<p dir="auto"><strong>Valorile permise intră în schemă.</strong> Numele dispozitivelor devin o enumerare:</p>
+<pre class="language-python"><code class="language-python is-loaded">DeviceName <span class="token operator">=</span> Literal<span class="token punctuation">[</span><span class="token string">"lampa_led"</span><span class="token punctuation">,</span> <span class="token string">"radiator"</span><span class="token punctuation">,</span> <span class="token string">"aer_conditionat"</span><span class="token punctuation">,</span> <span class="token string">"jaluzele"</span><span class="token punctuation">,</span> <span class="token string">"ventilatie"</span><span class="token punctuation">]</span>
+
+<span class="token decorator annotation punctuation">@mcp<span class="token punctuation">.</span>tool</span><span class="token punctuation">(</span>annotations<span class="token operator">=</span>CITIRE<span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">get_device_info</span><span class="token punctuation">(</span>name<span class="token punctuation">:</span> DeviceName<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> DeviceInfo<span class="token punctuation">:</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Serverul refuză să pornească dacă lista nu mai corespunde dispozitivelor din <code>building.py</code>. În <code>inputSchema</code> apare <code>"enum": ["lampa_led", "radiator", ...]</code>. Clientul (și modelul) vede lista înainte de apel, iar un nume greșit este respins <strong>înainte</strong> ca funcția să ruleze.</p>
+<p dir="auto"><strong>Tipul de ieșire devine schemă.</strong> Un model Pydantic ca tip de retur produce <code>outputSchema</code>:</p>
+<pre class="language-python"><code class="language-python is-loaded"><span class="token keyword">class</span> <span class="token class-name">DeviceInfo</span><span class="token punctuation">(</span>BaseModel<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    nume<span class="token punctuation">:</span> <span class="token builtin">str</span>
+    categorie<span class="token punctuation">:</span> <span class="token builtin">str</span>
+    putere_w<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">=</span> Field<span class="token punctuation">(</span>description<span class="token operator">=</span><span class="token string">"Puterea nominală, în wați."</span><span class="token punctuation">)</span>
+    note<span class="token punctuation">:</span> <span class="token builtin">str</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto"><strong>Erorile de domeniu devin erori de execuție.</strong> Funcția <code>_domeniu</code> prinde <code>BuildingError</code> și ridică <code>ToolError</code>, pe care FastMCP o transformă într-un rezultat cu <code>isError: true</code>:</p>
+<pre class="language-python"><code class="language-python is-loaded"><span class="token keyword">def</span> <span class="token function">_domeniu</span><span class="token punctuation">(</span>fn<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> fn<span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">)</span>
+    <span class="token keyword">except</span> BuildingError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> ToolError<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">from</span> e
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<h3 data-heading="3.3. Verificarea în Inspector" dir="auto">3.3. Verificarea în Inspector</h3>
+<pre class="language-powershell"><code class="language-powershell is-loaded">npx @modelcontextprotocol/inspector <span class="token operator">--</span>web <span class="token operator">--</span>protocol-era modern python server<span class="token punctuation">.</span>py
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Opțiunea <code>--protocol-era modern</code> cere versiunea 2026 a standardului MCP. <strong>Fără ea, Inspector folosește implicit varianta veche</strong>, pre-2026, care folosește <code>initialize</code>. Deschideți adresa afișată în terminal și conectați serverul cu comutatorul.</p>
+<h3 data-heading="3.4. Exerciții, (A)" dir="auto">3.4. Exerciții, (A)</h3>
+<p dir="auto"><strong>A1. Schema de intrare.</strong> În <strong>Tools</strong>, selectați <code>get_device_info</code> și <code>estimate_energy</code>. Cum arată câmpurile <code>name</code> și <code>hours</code> în formular? Găsiți în schemă <code>enum</code>, <code>exclusiveMinimum</code> și <code>maximum</code>.</p>
+<p dir="auto"><strong>A2. Schema de ieșire.</strong> Apelați <code>get_device_info</code> cu <code>radiator</code>. Comparați <code>content</code> cu <code>structuredContent</code>. Ce conține fiecare? De ce le trimite serverul pe amândouă?</p>
+<p dir="auto"><strong>A3. Un rezultat care nu e obiect.</strong> <code>list_devices</code> întoarce o listă. Priviți <code>outputSchema</code> și <code>structuredContent</code> (sau rulați comanda CLI pentru <code>tools/list</code> pe stdio, din secțiunea 8). Ce a făcut FastMCP cu lista și de ce?</p>
+<p dir="auto"><strong>A4. Două erori de execuție.</strong> Din CLI, apelați <code>get_device_info</code> cu <code>name=frigider</code>, apoi <code>estimate_energy</code> cu <code>name=radiator</code> și <code>hours=30</code>. Cine a produs mesajul de eroare: codul vostru sau validarea schemei? Ce valoare are <code>isError</code>? (CLI-ul se încheie cu un cod de ieșire nenul când <code>isError</code> este <code>true</code>: comanda a funcționat, instrumentul a raportat o eroare.)</p>
+<p dir="auto"><strong>A5. O eroare de domeniu.</strong> Apelați <code>set_device_state</code> cu <code>radiator</code> și <code>on=true</code>, apoi cu <code>aer_conditionat</code> și <code>on=true</code>. Ce mesaj primiți? Unde a fost scris acest mesaj: în <code>server.py</code> sau în <code>building.py</code>?</p>
+<hr>
+<h2 data-heading="4. Transportul HTTP" dir="auto">4. Transportul HTTP</h2>
+<h3 data-heading="4.1. Pornirea serverului pe HTTP" dir="auto">4.1. Pornirea serverului pe HTTP</h3>
+<p dir="auto">Același <code>server.py</code>, cu un argument:</p>
+<pre class="language-powershell"><code class="language-powershell is-loaded">python server<span class="token punctuation">.</span>py http
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Serverul ascultă la <code>http://127.0.0.1:8000/mcp</code> și rămâne pornit. <strong>Lăsați terminalul deschis</strong> și lucrați în altul, cu mediul virtual activat.</p>
+<p dir="auto">Fragmentul care alege transportul:</p>
+<pre class="language-python"><code class="language-python is-loaded">mcp<span class="token punctuation">.</span>run<span class="token punctuation">(</span>
+    transport<span class="token operator">=</span><span class="token string">"http"</span><span class="token punctuation">,</span>
+    host<span class="token operator">=</span><span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>             <span class="token comment"># doar local, nu 0.0.0.0</span>
+    port<span class="token operator">=</span><span class="token number">8000</span><span class="token punctuation">,</span>                    <span class="token comment"># adresa: http://127.0.0.1:8000/mcp</span>
+    host_origin_protection<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>  <span class="token comment"># verifică Host și Origin (implicit, în FastMCP, este oprită)</span>
+    show_banner<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<blockquote dir="auto">
+<p><strong>Atenție.</strong> În FastMCP 4, verificarea <code>Host</code> / <code>Origin</code> este <strong>oprită implicit</strong>, deși specificația o cere obligatoriu. De aceea o pornim explicit. Biblioteca nu garantează singură conformitatea: citiți parametrii și verificați.</p>
+</blockquote>
+<h3 data-heading="4.2. Folosirea Inspectorului pentru analiza URL" dir="auto">4.2. Folosirea Inspectorului pentru analiza URL</h3>
+<pre class="language-powershell"><code class="language-powershell is-loaded">npx @modelcontextprotocol/inspector <span class="token operator">--</span>web <span class="token operator">--</span>transport http <span class="token operator">--</span>server-url http:<span class="token operator">/</span><span class="token operator">/</span>127<span class="token punctuation">.</span>0<span class="token punctuation">.</span>0<span class="token punctuation">.</span>1:8000/mcp <span class="token operator">--</span>protocol-era modern
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Pe cardul inspectorului apare acum <strong>Streamable HTTP</strong> și <strong>MCP 2026-07-28</strong>. Serverul nu mai e pornit de Inspector: îl puteți opri și reporni independent.</p>
+<h3 data-heading="4.3. Utilizare" dir="auto">4.3. Utilizare</h3>
+<p dir="auto">Cu serverul pornit, rulați:</p>
+<pre class="language-powershell"><code class="language-powershell is-loaded">python client_demo<span class="token punctuation">.</span>py
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<pre class="language-text"><code class="language-text is-loaded">Ana    -&gt; set_device_state: {'pornite': ['radiator'], 'termostat_c': 21.0}
+Bogdan -&gt; get_building_state: {'pornite': ['radiator'], 'termostat_c': 21.0}
+Bogdan -&gt; set_device_state: isError = True | Nu pornesc aer_conditionat: conflict RIDICAT cu radiator, care este pornit. Încălzire și răcire simultană, consum inutil.
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Persoana A vede radiatorul pornit de Persoana B. Starea stă în <strong>procesul serverului</strong> (obiectul <code>cladire</code>), nu în conexiune. Pe <code>stdio</code> nu observați asta, pentru că fiecare client își pornește propriul server.</p>
+<blockquote dir="auto">
+<p><strong>Discuție: starea fără sesiuni.</strong> Protocolul nu mai are sesiuni, deci serverul nu poate ține „câte o clădire pentru fiecare client" pe baza conexiunii. Specificația cere ca starea care se întinde pe mai multe cereri să fie referită printr-un identificator explicit, transmis la fiecare cerere (<a data-tooltip-position="top" aria-label="https://modelcontextprotocol.io/specification/2026-07-28/basic" rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/basic" target="_blank">MCP - Overview, Statelessness</a>). Forma recomandată este un <strong>handle</strong>: un instrument de creare întoarce un identificator (de exemplu <code>scenario_id</code>), iar instrumentele următoare îl primesc ca argument obișnuit. Serverul păstrează starea sub acel identificator (<a data-tooltip-position="top" aria-label="https://modelcontextprotocol.io/specification/2026-07-28/server/tools" rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools" target="_blank">MCP - Tools, Stateful Tools</a>). Avantajul: orice instanță a serverului poate răspunde la orice cerere, deci serverul poate fi multiplicat în spatele unui echilibrator de încărcare.</p>
+</blockquote>
+<h3 data-heading="4.4. Utilziarea agentului din laboratorul anterior (HTTP)" dir="auto">4.4. Utilziarea agentului din laboratorul anterior (HTTP)</h3>
+<p dir="auto">În fisierul <code>agent.py</code> din laboratorul precedent, înlocuiți o singură linie:</p>
+<pre class="language-python"><code class="language-python is-loaded">self<span class="token punctuation">.</span>mcp <span class="token operator">=</span> Client<span class="token punctuation">(</span>SERVER<span class="token punctuation">)</span>                        <span class="token comment"># înainte: pornește server.py prin stdio</span>
+self<span class="token punctuation">.</span>mcp <span class="token operator">=</span> Client<span class="token punctuation">(</span><span class="token string">"http://127.0.0.1:8000/mcp"</span><span class="token punctuation">)</span>   <span class="token comment"># acum: se conectează la serverul din lab3-si</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Cu serverul curent pornit, rulați în fodlerul șablonului anterior comanda <code>python chat.py</code> (cu furnizorul <code>mock</code> sau cu Gemini). Agentul descoperă aceleași instrumente, acum cu scheme mai precise (enumerări, limite), fără alte modificări.</p>
+<h3 data-heading="4.5. Exerciții (B)" dir="auto">4.5. Exerciții (B)</h3>
+<p dir="auto"><strong>B1. Un singur server, mai mulți clienți.</strong> Cu Inspector conectat prin URL, porniți <code>ventilatie</code> (<code>set_device_state</code>). Rulați apoi <code>python client_demo.py</code>. Ce observați la prima linie afișată? Apelați din nou, în Inspector, <code>get_building_state</code>: unde a dispărut ventilația și cine a oprit-o?</p>
+<p dir="auto"><strong>B2. Repornirea.</strong> Opriți serverul (<code>Ctrl + C</code>) și reporniți-l. Ce s-a întâmplat cu starea clădirii? Ce ar trebui schimbat ca starea să supraviețuiască repornirii?</p>
+<p dir="auto"><strong>B3. Agentul (opțional, model real).</strong> După modificarea din 4.4, cereți agentului „Pornește radiatorul". Verificați apoi în Inspector, cu <code>get_building_state</code>, că efectul se vede și acolo.</p>
+<p dir="auto"><strong>B4. Discuție.</strong> Dați un exemplu în care starea partajată între clienți este dorită și unul în care este o problemă. Cum ar arăta, pentru clădire, instrumentul care creează un handle?</p>
+<hr>
+<h2 data-heading="5. Trimiterea de mesaje" dir="auto">5. Trimiterea de mesaje</h2>
+<p dir="auto"><code>raw_client.py</code> trimite cereri JSON-RPC cu <code>httpx</code>, fără SDK, și afișează <strong>tot</strong>: antetele, corpul cererii, codul HTTP și corpul răspunsului. Serverul trebuie să ruleze pe HTTP (secțiunea 4.1).</p>
+<h3 data-heading="5.1. Prima cerere: `server/discover`" dir="auto">5.1. Prima cerere: <code>server/discover</code></h3>
+<pre class="language-powershell"><code class="language-powershell is-loaded">python raw_client<span class="token punctuation">.</span>py discover
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Cererea (antetele și corpul):</p>
+<pre class="language-text"><code class="language-text is-loaded">MCP-Protocol-Version: 2026-07-28
+Mcp-Method: server/discover
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<pre class="language-json"><code class="language-json is-loaded"><span class="token punctuation">{</span>
+  <span class="token property">"jsonrpc"</span><span class="token operator">:</span> <span class="token string">"2.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token property">"method"</span><span class="token operator">:</span> <span class="token string">"server/discover"</span><span class="token punctuation">,</span>
+  <span class="token property">"params"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"_meta"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"io.modelcontextprotocol/protocolVersion"</span><span class="token operator">:</span> <span class="token string">"2026-07-28"</span><span class="token punctuation">,</span>
+      <span class="token property">"io.modelcontextprotocol/clientInfo"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"raw-client"</span><span class="token punctuation">,</span> <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"1.0"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token property">"io.modelcontextprotocol/clientCapabilities"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Răspunsul (prescurtat):</p>
+<pre class="language-json"><code class="language-json is-loaded"><span class="token punctuation">{</span>
+  <span class="token property">"jsonrpc"</span><span class="token operator">:</span> <span class="token string">"2.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token property">"result"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"_meta"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"io.modelcontextprotocol/serverInfo"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"smart-building-demo"</span><span class="token punctuation">,</span> <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"3.0"</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"supportedVersions"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"2026-07-28"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"capabilities"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"tools"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"listChanged"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token property">"resources"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"subscribe"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token property">"listChanged"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token property">"prompts"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"listChanged"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"resultType"</span><span class="token operator">:</span> <span class="token string">"complete"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">Construcția cererii se află în funcția <code>send</code> din <code>raw_client.py</code>: citiți-o.</p>
+<h3 data-heading="5.2. Apelarea instrumentelor" dir="auto">5.2. Apelarea instrumentelor</h3>
+<pre class="language-powershell"><code class="language-powershell is-loaded">python raw_client<span class="token punctuation">.</span>py list
+python raw_client<span class="token punctuation">.</span>py call estimate_energy name=radiator hours=2
+</code><button class="copy-code-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-copy"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></pre>
+<p dir="auto">În răspunsul lui <code>tools/call</code> găsiți <code>content</code>, <code>structuredContent</code>, <code>isError</code> și <code>resultType</code>. Comparați cu ce afișa Inspector în Partea A: panoul <strong>Protocol</strong> arată aceleași mesaje; CLI-ul afișează doar rezultatul, fără unele câmpuri de protocol (de exemplu <code>resultType</code>).</p>
+<h3 data-heading="5.3. Exerciții (C)" dir="auto">5.3. Exerciții (C)</h3>
+<p dir="auto">Pentru fiecare experiment notați <strong>codul HTTP</strong>, dacă răspunsul are <code>result</code> sau <code>error</code> și, după caz, <strong>codul de eroare JSON-RPC</strong>.</p>
+<p dir="auto"><strong>C1. Antetele.</strong> Rulați <code>python raw_client.py fara-antet</code> și <code>python raw_client.py antet-gresit</code>. Ce verifică serverul? De ce contează potrivirea antet-corp, dacă serverul citește oricum corpul?</p>
+<p dir="auto"><strong>C2. Versiunea.</strong> Rulați <code>python raw_client.py versiune</code>. Ce informație din răspuns i-ar permite unui client să reîncerce corect?</p>
+<p dir="auto"><strong>C3. Metoda.</strong> Rulați <code>python raw_client.py metoda</code>. Eroare de protocol sau de execuție?</p>
+<p dir="auto"><strong>C4. Instrumentul inexistent.</strong> Rulați <code>python raw_client.py instrument</code>. Specificația dă „instrument necunoscut" ca exemplu de <strong>eroare de protocol</strong> (cod <code>-32602</code>). Ce întoarce FastMCP? Dați un argument pentru fiecare variantă, din punctul de vedere al unui agent cu LLM.</p>
+<p dir="auto"><strong>C5. Originea.</strong> Rulați <code>python raw_client.py origin</code>. Apoi, în <code>server.py</code>, puneți <code>host_origin_protection=False</code>, reporniți serverul și repetați. Readuceți valoarea la <code>True</code>.</p>
+<p dir="auto"><strong>C6. Cele două ere în Inspector.</strong> Conectați Inspector prin URL de două ori: o dată cu <code>--protocol-era modern</code>, o dată fără. În panoul <strong>Protocol</strong> (eticheta <strong>MODERN</strong> / <strong>LEGACY</strong>), care este <strong>primul</strong> mesaj trimis în fiecare caz? Atenție: lista afișează implicit cele mai noi mesaje sus (<em>Newest First</em>). Ce mesaj apare doar în varianta veche?</p>
+<hr>
+<h2 data-heading="7. Temă" dir="auto">7. Temă</h2>
+<p dir="auto"><strong>Obligatoriu:</strong></p>
+<ol>
+<li dir="auto">Răspunsurile la exercițiile (A), (B) și (C).</li>
+<li dir="auto">Adăugați un instrument nou, de citire, cu <strong>model Pydantic ca tip de ieșire</strong>, de exemplu <code>estimate_building_power()</code>: puterea totală a dispozitivelor pornite, în W, și lista lor. Logica se scrie în <code>building.py</code>, iar instrumentul în <code>server.py</code>. Verificați <code>outputSchema</code> în Inspector.</li>
+<li dir="auto">Apelați instrumentul de la punctul 2 cu <code>raw_client.py</code> și predați cererea și răspunsul complete.</li>
+<li dir="auto">Un paragraf (maximum 15 rânduri) despre handle-uri: ce instrumente ar avea un server de clădire cu <code>scenario_id</code>, cât ar trăi un scenariu și ce s-ar întâmpla la un identificator expirat.</li>
+</ol>
+<hr>
+<h2 data-heading="8. Comenzi" dir="auto">8. Comenzi</h2>
+<div class="jelly-table-scroll"><table>
+<thead>
+<tr>
+<th>Scop</th>
+<th>Comandă</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Activare mediu virtual (din <code>lab3-si</code>, PowerShell)</td>
+<td><code>..\lab1-si\.venv\Scripts\Activate.ps1</code></td>
+</tr>
+<tr>
+<td>Activare mediu virtual (Linux / macOS)</td>
+<td><code>source ../lab1-si/.venv/bin/activate</code></td>
+</tr>
+<tr>
+<td>Logica, fără MCP</td>
+<td><code>python building.py</code></td>
+</tr>
+<tr>
+<td>Server pe stdio</td>
+<td><code>python server.py</code></td>
+</tr>
+<tr>
+<td>Server pe HTTP</td>
+<td><code>python server.py http</code></td>
+</tr>
+<tr>
+<td>Inspector web, stdio</td>
+<td><code>npx @modelcontextprotocol/inspector --web --protocol-era modern python server.py</code></td>
+</tr>
+<tr>
+<td>Inspector web, HTTP</td>
+<td><code>npx @modelcontextprotocol/inspector --web --transport http --server-url http://127.0.0.1:8000/mcp --protocol-era modern</code></td>
+</tr>
+<tr>
+<td>CLI, lista instrumentelor (stdio)</td>
+<td><code>npx @modelcontextprotocol/inspector --cli python server.py --protocol-era modern --method tools/list</code></td>
+</tr>
+<tr>
+<td>CLI, apel (stdio)</td>
+<td><code>npx @modelcontextprotocol/inspector --cli python server.py --protocol-era modern --method tools/call --tool-name get_device_info --tool-arg name=frigider</code></td>
+</tr>
+<tr>
+<td>CLI, lista instrumentelor (HTTP)</td>
+<td><code>npx @modelcontextprotocol/inspector --cli http://127.0.0.1:8000/mcp --protocol-era modern --method tools/list</code></td>
+</tr>
+<tr>
+<td>CLI, apel (HTTP)</td>
+<td><code>npx @modelcontextprotocol/inspector --cli http://127.0.0.1:8000/mcp --protocol-era modern --method tools/call --tool-name estimate_energy --tool-arg name=radiator --tool-arg hours=30</code></td>
+</tr>
+<tr>
+<td>Doi clienți pe același server</td>
+<td><code>python client_demo.py</code></td>
+</tr>
+<tr>
+<td>Mesaje de mână</td>
+<td><code>python raw_client.py discover</code>, <code>list</code>, <code>call &lt;instrument&gt; cheie=valoare ...</code></td>
+</tr>
+<tr>
+<td>Experimente</td>
+<td><code>python raw_client.py fara-antet</code>, <code>antet-gresit</code>, <code>versiune</code>, <code>metoda</code>, <code>instrument</code>, <code>origin</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 data-heading="9. Bibliografie și surse" dir="auto">9. Bibliografie și surse</h2>
+<ol>
+<li dir="auto">Model Context Protocol - <em>Specification</em> (versiunea 2026-07-28). <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28" target="_blank">https://modelcontextprotocol.io/specification/2026-07-28</a></li>
+<li dir="auto">Model Context Protocol - <em>Key Changes</em> (față de 2025-11-25). <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/changelog" target="_blank">https://modelcontextprotocol.io/specification/2026-07-28/changelog</a></li>
+<li dir="auto">Model Context Protocol - <em>Streamable HTTP</em>. <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http" target="_blank">https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http</a></li>
+<li dir="auto">Model Context Protocol - <em>Tools</em> (scheme, rezultate structurate, erori, instrumente cu stare). <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools" target="_blank">https://modelcontextprotocol.io/specification/2026-07-28/server/tools</a></li>
+<li dir="auto">Model Context Protocol - <em>Overview</em> (mesaje, <code>_meta</code>, coduri de eroare, <em>Statelessness</em>). <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/specification/2026-07-28/basic" target="_blank">https://modelcontextprotocol.io/specification/2026-07-28/basic</a></li>
+<li dir="auto">JSON-RPC 2.0 - <em>Specification</em>. <a rel="noopener noreferrer" class="external-link" href="https://www.jsonrpc.org/specification" target="_blank">https://www.jsonrpc.org/specification</a></li>
+<li dir="auto">FastMCP - documentație. <a rel="noopener noreferrer" class="external-link" href="https://gofastmcp.com" target="_blank">https://gofastmcp.com</a></li>
+<li dir="auto">FastMCP - <em>Changelog</em> (suportul pentru 2026-07-28, din versiunea 4.0.0). <a rel="noopener noreferrer" class="external-link" href="https://gofastmcp.com/changelog" target="_blank">https://gofastmcp.com/changelog</a></li>
+<li dir="auto">FastMCP - <em>HTTP Deployment</em> (<code>host_origin_protection</code>). <a rel="noopener noreferrer" class="external-link" href="https://gofastmcp.com/deployment/http" target="_blank">https://gofastmcp.com/deployment/http</a></li>
+<li dir="auto">MCP Inspector. <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/docs/tools/inspector" target="_blank">https://modelcontextprotocol.io/docs/tools/inspector</a></li>
+<li dir="auto">MCP Inspector - <em>Protocol eras</em> (legacy, auto, modern). <a rel="noopener noreferrer" class="external-link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/protocol-eras" target="_blank">https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/protocol-eras</a></li>
+</ol>
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      // 0. «JS 가 돈다»는 표시부터 남긴다 — 이 클래스가 붙어야 테마 토글과 복사 버튼이 보인다.
+      // JS 를 안 돌리는 뷰어에서는 붙지 않으므로 눌러도 소용없는 버튼이 애초에 안 뜬다.
+      // 맨 앞에 두는 이유는 뒤에서 무엇이 잘못돼도 이 표시만은 남게 하려는 것이다.
+      document.documentElement.classList.add('js');
+
+      // 1. 테마 토글 핸들러
+      const toggleBtn = document.getElementById('theme-toggle');
+      const root = document.documentElement;
+
+      const ICON_SUN = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+      const ICON_MOON = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+
+      function updateToggleText(theme) {
+        if (toggleBtn) {
+          toggleBtn.innerHTML = theme === 'dark' ? ICON_SUN : ICON_MOON;
+          toggleBtn.setAttribute('title', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+      }
+
+      function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        try {
+          localStorage.setItem('single-html-theme', theme);
+        } catch (e) {}
+        updateToggleText(theme);
+      }
+
+      let savedTheme = 'light';
+      try {
+        savedTheme = localStorage.getItem('single-html-theme') || 'light';
+      } catch (e) {}
+
+      setTheme(savedTheme);
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          const current = root.getAttribute('data-theme') || 'light';
+          setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+      }
+
+      // ── 2. 코드 블록 복사 ──────────────────────────────────────────────
+      //
+      // 복사 방법이 셋인데 **환경을 보고 하나를 «고르지» 않는다.** 되는 것이 나올 때까지
+      // 순서대로 시도한다 — 환경 판정은 틀리면 되는 길까지 막는다(그 방식으로 세 번 틀렸다).
+      //   1. 숨긴 필드 + execCommand   — iOS 에서도 되는 유일한 길. 동기적이라 매달릴 수 없다
+      //   2. 본문 노드 선택 + execCommand — 데스크톱 폴백. iOS 는 편집 가능한 선택만 복사한다
+      //   3. navigator.clipboard        — 매달릴 수 있어 마지막이고 타임아웃을 건다
+      // 셋 다 실패하면 호출부가 본문을 «선택»해 주고 사용자가 직접 복사하게 한다 —
+      // 「복사 실패」가 막다른 길이 되지 않아야 한다.
+
+      const CLIPBOARD_TIMEOUT_MS = 3000;
+
+      function selectNodeContents(el) {
+        try {
+          const sel = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          sel.removeAllRanges();
+          sel.addRange(range);
+          return sel;
+        } catch (e) {
+          console.warn('selectNodeContents failed:', e);
+          return null;
+        }
+      }
+
+      // 화면 밖으로 보내면 iOS 에서 선택이 풀리므로 화면 안에 투명하게 둔다. 글자 16px 는
+      // iOS 가 그보다 작은 입력에 포커스가 가면 화면을 확대해 버리기 때문이다.
+      // focus() 와 select() 가 **둘 다** 있어야 한다 — execCommand('copy') 가 복사하는 것은
+      // 「문서 선택」이라, 포커스 없는 필드에 setSelectionRange 만 하면 빈 것을 복사한다.
+      function copyViaHiddenField(text) {
+        let ta = null;
+        try {
+          ta = document.createElement('textarea');
+          ta.value = text;
+          ta.readOnly = false;
+          ta.contentEditable = 'true';
+          ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px;';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          ta.setSelectionRange(0, text.length);
+          return document.execCommand('copy');
+        } catch (e) {
+          console.warn('hidden-field copy failed:', e);
+          return false;
+        } finally {
+          if (ta && ta.parentNode) ta.parentNode.removeChild(ta);
+        }
+      }
+
+      function copyViaNodeSelection(el) {
+        const sel = selectNodeContents(el);
+        if (!sel) return false;
+        try {
+          const ok = document.execCommand('copy');
+          if (ok) sel.removeAllRanges();   // 실패하면 선택을 남긴다 — 그게 수동 복사 경로다
+          return ok;
+        } catch (e) {
+          console.warn('node-selection copy failed:', e);
+          return false;
+        }
+      }
+
+      async function copyViaClipboardApi(text) {
+        if (!navigator.clipboard) return false;
+        try {
+          const outcome = await Promise.race([
+            navigator.clipboard.writeText(text).then(function() { return 'done'; }),
+            new Promise(function(resolve) {
+              setTimeout(function() { resolve('timeout'); }, CLIPBOARD_TIMEOUT_MS);
+            })
+          ]);
+          if (outcome === 'done') return true;
+          console.warn('clipboard.writeText did not settle within ' + CLIPBOARD_TIMEOUT_MS + 'ms');
+        } catch (e) {
+          console.warn('clipboard.writeText failed:', e);
+        }
+        return false;
+      }
+
+      async function copyText(text, codeEl) {
+        if (copyViaHiddenField(text)) return true;
+        if (codeEl && copyViaNodeSelection(codeEl)) return true;
+        return copyViaClipboardApi(text);
+      }
+
+      // 버튼은 **옵시디언이 이미 구워 넣은 것에 동작을 매단다.** MarkdownRenderer 의 코드블록
+      // 후처리가 .copy-code-button 까지 함께 굽기 때문이다. 없을 때만 만드는 것은 옵시디언
+      // 버전이 달라 안 구워 주는 경우의 대비책이다 — 「있으면 건너뛴다」로 두면 그 버튼들에
+      // 핸들러가 하나도 붙지 않아, 보이는데 눌러도 아무 일 없는 상태가 된다.
+      document.querySelectorAll('.markdown-body pre').forEach(function(pre) {
+        const codeEl = pre.querySelector('code');
+        if (!codeEl) return;
+
+        let btn = pre.querySelector('.copy-code-button');
+        if (!btn) {
+          btn = document.createElement('button');
+          btn.className = 'copy-code-button';
+          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+          pre.appendChild(btn);
+        }
+        if (btn.dataset.copyBound) return;
+        btn.dataset.copyBound = '1';
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Copy code');
+
+        // 조용히 끝나는 경로를 남기지 않는다 — 누르면 무엇이든 반드시 표시된다.
+        // 예전에는 본문이 비면 아무 표시 없이 return 했고, clipboard 프라미스가 매달리면
+        // 그대로 멈췄다. «눌렀는데 아무 일도 안 일어남» 은 사용자가 원인을 좁힐 수 없는 상태다.
+        btn.addEventListener('click', async function() {
+          const origHtml = btn.innerHTML;
+          const textToCopy = codeEl.innerText || codeEl.textContent || '';
+          let label;
+          if (!textToCopy) {
+            label = 'Nothing to copy';
+          } else if (await copyText(textToCopy, codeEl)) {
+            label = 'Copied';
+          } else if (selectNodeContents(codeEl)) {
+            // 안내 문구를 입력 방식에 맞춘다 — 폰에 «Cmd+C» 를 띄우면 길이 없는 안내가 된다.
+            const touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            label = touch ? 'Selected · long-press to copy' : 'Selected · Cmd+C';
+          } else {
+            label = 'Copy failed';
+          }
+          btn.textContent = label;
+          setTimeout(function() { btn.innerHTML = origHtml; }, 2500);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
